@@ -4,7 +4,6 @@ import { Contract } from '@/packages/space-sdk';
 import { Countdown } from './Countdown';
 
 export const ContractCard = ({ contract }: {contract: Contract}) => {
-    console.log({contract})
     return (
         <div className="rounded-lg shadow-md p-6 mb-4">
             <h2 className="text-xl font-bold mb-2">{contract.factionSymbol}</h2>

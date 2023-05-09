@@ -3,15 +3,16 @@ import { Waypoint } from '@/packages/space-sdk';
 import format from 'date-fns/format';
 
 interface WaypointsProps {
-  waypointsData: Waypoint[];  // Assuming WaypointsData is the type of your API response
+  waypointsData: Waypoint[];
 }
 
 export const Waypoints: FC<WaypointsProps> = ({ waypointsData }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-4">
+    <div className="rounded-lg shadow-md p-6 mb-4">
       <h2 className="text-xl font-bold mb-2">Waypoints</h2>
+      <div className="container flex flex-wrap">
       {waypointsData.map((waypoint, index) => (
-        <div key={index} className="mb-2">
+        <div key={index} className="mb-2 w-1/4">
           <p className="text-sm">Symbol: {waypoint.symbol}</p>
           <p className="text-sm">Type: {waypoint.type}</p>
           <p className="text-sm">System Symbol: {waypoint.systemSymbol}</p>
@@ -38,6 +39,7 @@ export const Waypoints: FC<WaypointsProps> = ({ waypointsData }) => {
           </div>
         </div>
       ))}
+      </div>
     </div>
   );
 };

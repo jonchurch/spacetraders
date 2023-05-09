@@ -21,7 +21,7 @@ export const SystemInfo = ({systemSymbol}: {systemSymbol: string}) => {
             }
         }
         getData()
-    })
+    }, [systemSymbol])
 
     if (!systemData || !waypointData) {
         return null
