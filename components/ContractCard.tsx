@@ -1,6 +1,5 @@
 'use client'
 import React from 'react'
-import format from 'date-fns/format';
 import { Contract } from '@/packages/space-sdk';
 import { Countdown } from './Countdown';
 
@@ -23,7 +22,7 @@ export const ContractCard = ({ contract }: {contract: Contract}) => {
             ))}
             <p className="text-sm mb-2">Accepted: {contract.accepted ? 'Yes' : 'No'}</p>
             <p className="text-sm mb-2">Fulfilled: {contract.fulfilled ? 'Yes' : 'No'}</p>
-            <p className="text-sm mb-2">Expiration: {format(new Date(contract.expiration), 'dd/MM/yyyy hh:mm')}</p>
+            <p className="text-sm mb-2">Expiration: <Countdown targetDate={contract.expiration} /></p>
         </div>
     );
 };
