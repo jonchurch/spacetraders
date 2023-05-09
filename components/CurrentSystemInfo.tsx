@@ -1,10 +1,35 @@
-import React from 'react'
-import { System } from '@/packages/space-sdk'
+'use client'
+import React, { useEffect, useState } from 'react'
+import { SystemCard } from './SystemCard'
+import { Waypoints } from './Waypoints'
 
-export const SystemInfo = ({systemId}: {systemId: string}) => {
+import { getSystemAndWaypoints } from '@/api'
+import { System, Waypoint } from '@/packages/space-sdk'
+
+export const SystemInfo = ({systemSymbol}: {systemSymbol: string}) => {
+    const [systemData, setSystemData] = useState<System>()
+    const [waypointData, setWaypointData] = useState<Waypoint[]>()
+
+    useEffect(() => {
+        async function getData() {
+            try {
+                const {systemData, waypointData} = await getSystemAndWaypoints(systemSymbol) ?? {}
+                setSystemData(systemData)
+                setWaypointData(waypointData)
+            } catch(err) {
+                console.log(err)
+            }
+        }
+        getData()
+    })
+
+    if (!systemData || !waypointData) {
+        return null
+    }
     return (
     <div>
-            <System />
+        <SystemCard system={systemData}/>
+        <Waypoints waypointsData={waypointData}/>
     </div>
     )
 }
