@@ -13,6 +13,7 @@ export const Ships = () => {
   return (
     <div className="flex flex-col items-center">
       <h1>Ships</h1>
+      <div className="flex flex-wrap">
       {ships.map((ship) => (
         <div key={ship.symbol} className="border p-4 m-2">
           <h2 className="font-bold mb-2">{ship.registration.name}</h2>
@@ -24,6 +25,7 @@ export const Ships = () => {
           <p className="text-sm">Flight mode: {ship.nav.flightMode}</p>
         </div>
       ))}
+      </div>
     </div>
   );
 }
