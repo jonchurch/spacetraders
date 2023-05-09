@@ -32,3 +32,13 @@ export const getSystemAndWaypoints = async (systemSymbol: string) => {
     console.log(err)
   }
 }
+
+export const getShipyard = async({systemSymbol, waypointSymbol}: {systemSymbol: string, waypointSymbol: string}) => {
+  const systems = new SystemsApi(config)
+  try {
+    const {data} = await systems.getShipyard(systemSymbol, waypointSymbol)
+    return data
+  } catch(err) {
+    console.log(err)
+  }
+}
