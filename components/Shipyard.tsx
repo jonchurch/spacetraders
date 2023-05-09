@@ -3,6 +3,8 @@ import { Shipyard } from '@/packages/space-sdk/dist';
 import { FC, useEffect, useState } from 'react';
 import format from 'date-fns/format';
 
+import { getShipyard } from '@/api';
+
 interface ShipyardMenuProps {
   shipyardData: Shipyard
 }
@@ -14,10 +16,15 @@ type ShipyardProps = {
 
 // Shipyard component that fetches data and displays it in a ShipyardMenu component
 export const WaypointShipyard: FC<ShipyardProps> = ({systemSymbol, waypointSymbol}) => {
-    const [shipyardData] = useState<Shipyard | undefined>()
+    const [shipyardData, setShipyardData] = useState<Shipyard | undefined>()
     useEffect(() => {
-        function getShipyardData() {
-
+        async function getShipyardData() {
+            try {
+                const shipyardData = await getShipyard({systemSymbol, waypointSymbol})
+                setShipyardData(shipyardData)
+            } catch(err) {
+                console.log(err)
+            }
         }
         getShipyardData()
     }, [systemSymbol, waypointSymbol])
