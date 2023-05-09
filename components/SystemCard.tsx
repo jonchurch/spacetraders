@@ -1,0 +1,30 @@
+import React, { FC } from 'react';
+import { System } from '@/packages/space-sdk';
+
+type SystemCardProps = {
+    system: System
+}
+
+export const SystemCard: FC<SystemCardProps> = ({ system }) => {
+  return (
+    <div className="bg-white rounded-lg shadow-md p-6 mb-4">
+      <h2 className="text-xl font-bold mb-2">System: {system.symbol}</h2>
+      <p className="text-sm mb-2">Sector: {system.sectorSymbol}</p>
+      <p className="text-sm mb-2">Type: {system.type}</p>
+      <p className="text-sm mb-2">Coordinates: {system.x}, {system.y}</p>
+      <h3 className="text-lg font-bold mb-2">Waypoints</h3>
+      {system.waypoints.map((waypoint, index) => (
+        <div key={index} className="mb-2">
+          <p className="text-sm">Symbol: {waypoint.symbol}</p>
+          <p className="text-sm">Type: {waypoint.type}</p>
+          <p className="text-sm">Coordinates: {waypoint.x}, {waypoint.y}</p>
+        </div>
+      ))}
+      <h3 className="text-lg font-bold mb-2">Factions</h3>
+      {system.factions.map((faction, index) => (
+        <p key={index} className="text-sm mb-2">Symbol: {faction.symbol}</p>
+      ))}
+    </div>
+  );
+};
+
