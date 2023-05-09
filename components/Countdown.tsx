@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import differenceInSeconds from 'date-fns/differenceInSeconds';
 
-type CountdownProps = {targetDate: string}
+type CountdownProps = {targetDate: Date}
 
 export const Countdown = ({ targetDate }: CountdownProps) => {
   const [timeLeft, setTimeLeft] = useState(differenceInSeconds(new Date(targetDate), new Date()));

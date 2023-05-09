@@ -2,13 +2,15 @@
 import React from 'react'
 import format from 'date-fns/format';
 import { Contract } from '@/packages/space-sdk';
+import { Countdown } from './Countdown';
 
 export const ContractCard = ({ contract }: {contract: Contract}) => {
+    console.log({contract})
     return (
-        <div className="bg-white rounded-lg shadow-md p-6 mb-4">
+        <div className="rounded-lg shadow-md p-6 mb-4">
             <h2 className="text-xl font-bold mb-2">{contract.factionSymbol}</h2>
             <p className="text-sm mb-2">Type: {contract.type}</p>
-            <p className="text-sm mb-2">Deadline: {format(new Date(contract.terms.deadline), 'dd/MM/yyyy hh:mm')}</p>
+            <p className="text-sm mb-2">Deadline: <Countdown targetDate={contract.terms.deadline} /></p>
             <p className="text-sm mb-2">Payment on acceptance: {contract.terms.payment.onAccepted}</p>
             <p className="text-sm mb-2">Payment on fulfillment: {contract.terms.payment.onFulfilled}</p>
             {contract.terms.deliver?.map((item, index) => (

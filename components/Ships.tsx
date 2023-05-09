@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Ship } from '../packages/space-sdk'
 
-import {getShips} from '../api'
+import { getShips } from '../api'
 
 export const Ships = () => {
   const [ships, setShips] = useState<Ship[]>([]);
@@ -12,8 +12,9 @@ export const Ships = () => {
 
   return (
     <div className="flex flex-col items-center">
+      <h1>Ships</h1>
       {ships.map((ship) => (
-        <div key={ship.symbol} className="border p-4 m-2 w-1/2">
+        <div key={ship.symbol} className="border p-4 m-2">
           <h2 className="font-bold mb-2">{ship.registration.name}</h2>
           <h3 className="text-sm">{ship.symbol}</h3>
           <p className="text-sm">Faction: {ship.registration.factionSymbol}</p>

@@ -1,4 +1,4 @@
-import { createConfiguration } from '../packages/space-sdk'
+import { FleetApi, createConfiguration } from './packages/space-sdk'
 
 export const config = createConfiguration({
   authMethods: {
