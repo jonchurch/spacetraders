@@ -1,29 +1,10 @@
+'use client'
 import { useEffect, useState } from 'react';
-import {createConfiguration, FleetApi, Ship} from '../packages/space-sdk'
+import { Ship } from '../packages/space-sdk'
 
-const config = createConfiguration({
-  authMethods: {
-    AgentToken:  {
-      tokenProvider: {
-        getToken() {
-            return process.env.TOASTY ?? 'NO_API_TOKEN_PROVIDED'
-        },
-      }
-    }
-  }
-})
+import {getShips} from '../api'
 
-const getShips = async () => {
-  const fleet= new FleetApi(config)
-  try {
-    const { data } = await fleet.getMyShips()
-    return data
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-export default function ShipsDisplay() {
+export const Ships = () => {
   const [ships, setShips] = useState<Ship[]>([]);
   useEffect(() => {
     getShips().then((ships) => {setShips(ships ?? [])})

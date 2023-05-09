@@ -1,4 +1,4 @@
-const env = require('.env.js')
+const env = require('./.env.js')
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env 
