@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { Waypoint } from '@/packages/space-sdk';
 import format from 'date-fns/format';
+import Link from 'next/link';
 
 interface WaypointsProps {
   waypointsData: Waypoint[];
@@ -25,7 +26,13 @@ export const Waypoints: FC<WaypointsProps> = ({ waypointsData }) => {
           <p className="text-sm">Traits:</p>
           {waypoint.traits.map((trait, traitIndex) => (
             <div key={traitIndex} className="ml-2">
-              <p className="text-sm">- {trait.name}</p>
+                
+                {trait.symbol === "SHIPYARD" ? 
+                <Link href={`/system/${waypoint.systemSymbol}/waypoints/${waypoint.symbol}/shipyard`}>
+                    <p className="text-sm">- {trait.name}</p>
+                </Link> :
+                  (<p className="text-sm">- {trait.name}</p>)
+                }
               <p className="text-sm">{trait.description}</p>
             </div>
           ))}
