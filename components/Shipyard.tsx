@@ -21,6 +21,7 @@ export const WaypointShipyard: FC<ShipyardProps> = ({systemSymbol, waypointSymbo
         async function getShipyardData() {
             try {
                 const shipyardData = await getShipyard({systemSymbol, waypointSymbol})
+        console.log({shipyardData})
                 setShipyardData(shipyardData)
             } catch(err) {
                 console.log(err)

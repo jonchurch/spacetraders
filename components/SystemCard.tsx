@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { System } from '@/packages/space-sdk';
+import Copy from './copyToClipboard';
 
 type SystemCardProps = {
     system: System
@@ -16,7 +17,7 @@ export const SystemCard: FC<SystemCardProps> = ({ system }) => {
       <div className='container flex flex-wrap'>
       {system.waypoints.map((waypoint, index) => (
         <div key={index} className="mb-2 w-1/4">
-          <p className="text-sm">Symbol: {waypoint.symbol}</p>
+          <p className="text-sm">Symbol: {waypoint.symbol}<Copy emoji='📎' toCopy={waypoint.symbol}/></p>
           <p className="text-sm">Type: {waypoint.type}</p>
           <p className="text-sm">Coordinates: {waypoint.x}, {waypoint.y}</p>
         </div>

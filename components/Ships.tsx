@@ -58,8 +58,12 @@ const NavigateShip = ({shipSymbol, initialWaypointSymbol} : {shipSymbol: string;
   }
 
   const handleGoClick = () => {
+    if (!waypointSymbol) {
+      return
+    }
     mutation.mutate({shipSymbol, waypointSymbol});
     setIsNavigating(false);
+    setWaypointSymbol('')
   }
 
   return (
