@@ -25,12 +25,17 @@ export const getShips = async () => {
 export const orbitShip = async (shipSymbol: string) => {
   const fleet = new FleetApi(config)
   try {
-    const res = await fleet.orbitShip(shipSymbol)
-    console.log(res)
-    return res.data
+    const {data} = await fleet.orbitShip(shipSymbol)
+    return data
   } catch(err) {
     console.log(err)
   }
+}
+
+export const dockShip = async (shipSymbol: string) => {
+  const fleet = new FleetApi(config)
+  const { data } = await fleet.dockShip(shipSymbol)
+  return data
 }
 
 export const getSystemAndWaypoints = async (systemSymbol: string) => {
