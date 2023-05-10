@@ -2,8 +2,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Ship } from '../packages/space-sdk'
 
-import { getShips, orbitShip, dockShip} from '../api'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getShips, orbitShip, dockShip, navigateShip } from '../api'
+import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { displayFuel } from './utils';
+import { Countdown } from './Countdown';
 
 const OrbitShip = ({shipSymbol}: {shipSymbol: string}) => {
   const queryClient = useQueryClient()
@@ -37,6 +39,58 @@ const DockShip = ({shipSymbol}: {shipSymbol: string}) => {
   )
 }
 
+
+const NavigateShip = ({shipSymbol, initialWaypointSymbol} : {shipSymbol: string; initialWaypointSymbol?: string}) => {
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [waypointSymbol, setWaypointSymbol] = useState(initialWaypointSymbol);
+  const queryClient = useQueryClient()
+  
+  const mutation = useMutation({mutationFn: navigateShip, onSuccess: () => {
+    queryClient.invalidateQueries({queryKey: ['ships']})
+  }});
+
+  const handleButtonClick = () => {
+    setIsNavigating(true);
+  }
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setWaypointSymbol(event.target.value);
+  }
+
+  const handleGoClick = () => {
+    mutation.mutate({shipSymbol, waypointSymbol});
+    setIsNavigating(false);
+  }
+
+  return (
+    <>
+      {!isNavigating ? (
+        <button 
+          className='bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-2 rounded'
+          onClick={handleButtonClick}
+        >
+          Nav
+        </button>
+      ) : (
+        <div>
+          <input 
+            type="text" 
+            value={waypointSymbol} 
+            onChange={handleInputChange}
+            className='border-2 border-purple-500 py-1 px-2 rounded bg-purple-400'
+          />
+          <button 
+            className='bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-2 rounded ml-2'
+            onClick={handleGoClick}
+          >
+            GO
+          </button>
+        </div>
+      )}
+    </>
+  )
+}
+
 export const ShipCard = ({ship}: {ship: Ship}) => {
   return (
       <div key={ship.symbol} className="border p-4 m-2">
@@ -46,6 +100,7 @@ export const ShipCard = ({ship}: {ship: Ship}) => {
         <p className="text-sm">Role: {ship.registration.role}</p>
         <p className='text-sm'>System: {ship.nav.systemSymbol}</p>
         <p className={`text-sm ${ship.nav.status === 'IN_TRANSIT' && 'text-orange-300'}`}>Waypoint: {ship.nav.waypointSymbol}</p>
+        <p className='text-sm'>Fuel: {displayFuel(ship.fuel.current, ship.fuel.capacity)} {(100 * ship.fuel.current) / ship.fuel.capacity}%</p>
         <p className="text-sm">Status: {ship.nav.status}</p>
         <p className="text-sm">Flight mode: {ship.nav.flightMode}</p>
         {ship.nav.status === 'DOCKED' && (
@@ -54,6 +109,10 @@ export const ShipCard = ({ship}: {ship: Ship}) => {
         {ship.nav.status === 'IN_ORBIT' && (
         <DockShip shipSymbol={ship.symbol}/> 
         )}
+      {ship.nav.status !== 'IN_TRANSIT' &&
+      <NavigateShip shipSymbol={ship.symbol}/>
+      }
+      {ship.nav.status === 'IN_TRANSIT' && <Countdown targetDate={ship.nav.route.arrival}/>}
       </div>
   )
 }

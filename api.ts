@@ -37,6 +37,11 @@ export const dockShip = async (shipSymbol: string) => {
   const { data } = await fleet.dockShip(shipSymbol)
   return data
 }
+export const navigateShip = async ({shipSymbol, waypointSymbol}: {shipSymbol: string; waypointSymbol: string}) => {
+  const fleet = new FleetApi(config)
+  const { data } = await fleet.navigateShip(shipSymbol, {waypointSymbol})
+  return data
+}
 
 export const getSystemAndWaypoints = async (systemSymbol: string) => {
   const systems = new SystemsApi(config)
