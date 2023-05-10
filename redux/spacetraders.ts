@@ -5,7 +5,11 @@ import { Ship } from '@/packages/space-sdk'
 // Define a service using a base URL and expected endpoints
 export const spacetradersApi = createApi({
   reducerPath: 'spacetradersApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.spacetraders.io/v2/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.spacetraders.io/v2/', prepareHeaders: (headers) => {
+    if (process.env.TOASTY) {
+      headers.set('authorization', `Bearer ${process.env.TOASTY}`)
+    }
+  } }),
   endpoints: (builder) => ({
      getShips: builder.query<Ship[], void>({
       query: () => '/my/ships'
