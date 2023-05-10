@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
+    "@rtk-query/codegen-openapi": "^1.0.0",
     "@types/node": "20.1.1",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
@@ -25,7 +27,6 @@
   },
   "description": "Having fun with spacetraders.io",
   "main": ".env.js",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jonchurch/spacetraders.git"
@@ -36,5 +37,8 @@
   "bugs": {
     "url": "https://github.com/jonchurch/spacetraders/issues"
   },
-  "homepage": "https://github.com/jonchurch/spacetraders#readme"
+  "homepage": "https://github.com/jonchurch/spacetraders#readme",
+  "devDependencies": {
+    "ts-node": "^10.9.1"
+  }
 }
