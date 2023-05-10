@@ -1,4 +1,4 @@
-import { ContractsApi, FleetApi, SystemsApi, createConfiguration } from './packages/space-sdk'
+import { ContractsApi, FleetApi, Ship, SystemsApi, createConfiguration } from './packages/space-sdk'
 
 export const config = createConfiguration({
   authMethods: {
@@ -19,6 +19,17 @@ export const getShips = async () => {
     return data
   } catch (error) {
     console.error(error);
+  }
+}
+
+export const orbitShip = async (shipSymbol: string) => {
+  const fleet = new FleetApi(config)
+  try {
+    const res = await fleet.orbitShip(shipSymbol)
+    console.log(res)
+    return res.data
+  } catch(err) {
+    console.log(err)
   }
 }
 
