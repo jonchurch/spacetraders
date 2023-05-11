@@ -1,4 +1,4 @@
-import { ContractsApi, FleetApi, Ship, SystemsApi, createConfiguration } from './packages/space-sdk'
+import { ContractsApi, FleetApi, Ship, Survey, SystemsApi, createConfiguration } from './packages/space-sdk'
 
 export const config = createConfiguration({
   authMethods: {
@@ -40,6 +40,18 @@ export const dockShip = async (shipSymbol: string) => {
 export const navigateShip = async ({shipSymbol, waypointSymbol}: {shipSymbol: string; waypointSymbol: string}) => {
   const fleet = new FleetApi(config)
   const { data } = await fleet.navigateShip(shipSymbol, {waypointSymbol})
+  return data
+}
+
+export const extractResources = async ({shipSymbol, survey}: {shipSymbol: string; survey?: Survey;}) => {
+  const fleet = new FleetApi(config)
+  const { data } = await fleet.extractResources(shipSymbol, {survey})
+  return data
+}
+
+export const refuelShip = async (shipSymbol: string) => {
+  const fleet = new FleetApi(config)
+  const { data } = await fleet.refuelShip(shipSymbol)
   return data
 }
 
