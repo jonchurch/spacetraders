@@ -16,7 +16,7 @@ export const Refuel = ({shipSymbol} : {shipSymbol: string}) => {
   return <button 
       onClick={() => mutation.mutate(shipSymbol)}
       className='bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded'
-    >Mine</button>
+    >Refuel</button>
 }
 export const OrbitShip = ({shipSymbol}: {shipSymbol: string}) => {
   const queryClient = useQueryClient()

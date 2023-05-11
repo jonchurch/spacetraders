@@ -10,6 +10,9 @@
 // 🟩🟩🟩🟩⬜️
 // 🟨🟨🟨⬜️⬜️
 // 🟥🟥⬜️⬜️⬜️
+
+import { Ship, Waypoint } from "@/packages/space-sdk";
+
 // but I'd like to give more fidelity in the measurement, since fuel is important!
 export const displayFuel = (current: number, capacity: number)=> {
     const fullEmoji = "🟩";
@@ -36,3 +39,7 @@ export const displayFuel = (current: number, capacity: number)=> {
     return fuelDisplay;
 }
 
+export const hasMarketplace = (waypoint?: Waypoint): boolean => 
+    (waypoint && waypoint.traits.some(({symbol}) => symbol === "MARKETPLACE")) ?? false;
+
+export const isFuelFull = ({fuel: {capacity, current}}: Ship) => current >= capacity

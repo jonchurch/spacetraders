@@ -55,6 +55,12 @@ export const refuelShip = async (shipSymbol: string) => {
   return data
 }
 
+export const getSystemWaypoints = async (systemSymbol: string) => {
+  const systems = new SystemsApi(config)
+  const { data } = await systems.getSystemWaypoints(systemSymbol)
+  return data
+}
+
 export const getSystemAndWaypoints = async (systemSymbol: string) => {
   const systems = new SystemsApi(config)
   try {

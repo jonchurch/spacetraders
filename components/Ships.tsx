@@ -1,13 +1,20 @@
 'use client'
-import { Ship } from '../packages/space-sdk'
+import { Ship, Waypoint, WaypointTrait } from '../packages/space-sdk'
 
-import { getShips } from '../api'
+import { getShips, getSystemWaypoints } from '../api'
 import { useQuery, } from '@tanstack/react-query';
-import { displayFuel } from './utils';
+import { displayFuel, fuelFull, hasMarketplace, isFuelFull } from './utils';
 import { Countdown } from './Countdown';
-import { DockShip, NavigateShip,  OrbitShip } from './ActionButtons';
+import { DockShip, NavigateShip,  OrbitShip, Refuel } from './ActionButtons';
 
 export const ShipCard = ({ship}: {ship: Ship}) => {
+  const currentSystemSymbol = ship.nav.systemSymbol
+  const currentWaypointSymbol = ship.nav.waypointSymbol
+  const { data: waypoint } = useQuery({
+    queryKey: ['waypoints', ],
+    queryFn: () => getSystemWaypoints(currentSystemSymbol),
+    select: (waypoints) => waypoints.find((wp) => wp.symbol === currentWaypointSymbol)
+  })
   return (
     <div key={ship.symbol} className="border p-4 m-2">
       <h2 className="font-bold mb-2">{ship.registration.name}</h2>
@@ -19,12 +26,15 @@ export const ShipCard = ({ship}: {ship: Ship}) => {
       <p className='text-sm'>Fuel: {displayFuel(ship.fuel.current, ship.fuel.capacity)} {(100 * ship.fuel.current) / ship.fuel.capacity}%</p>
       <p className="text-sm">Status: {ship.nav.status}</p>
       <p className="text-sm">Flight mode: {ship.nav.flightMode}</p>
-      <ShipControls ship={ship} />
+      <ShipControls ship={ship} waypoint={waypoint}/>
+      {ship.nav.status === 'IN_TRANSIT' && 
+        <Countdown hideWhenComplete={false} targetDate={ship.nav.route.arrival}/>
+      }
     </div>
   )
 }
 
-export const ShipControls = ({ship}: {ship: Ship}) => {
+export const ShipControls = ({ship, waypoint}: {ship: Ship; waypoint?: Waypoint}) => {
   return (
     <div>
       {ship.nav.status === 'DOCKED' && (
@@ -36,11 +46,11 @@ export const ShipControls = ({ship}: {ship: Ship}) => {
       {ship.nav.status !== 'IN_TRANSIT' &&
         <NavigateShip shipSymbol={ship.symbol}/>
       }
-      {ship.nav.status === 'IN_TRANSIT' && 
-        <Countdown hideWhenComplete={false} targetDate={ship.nav.route.arrival}/>
+      {ship.nav.status === "DOCKED" && !isFuelFull(ship) && hasMarketplace(waypoint) && 
+        <Refuel shipSymbol={ship.symbol}/>
       }
     </div>
-)
+  )
 }
 
 export const Ships = () => {
