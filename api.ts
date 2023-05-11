@@ -55,6 +55,15 @@ export const refuelShip = async (shipSymbol: string) => {
   return data
 }
 
+export const getShipCooldown= async (shipSymbol: string) => {
+  const fleet = new FleetApi(config)
+  const res = await fleet.getShipCooldown(shipSymbol)
+  if (res) {
+    return res.data
+  }
+  throw new Error('Hmm, no response from getShipCooldown')
+}
+
 export const getSystemWaypoints = async (systemSymbol: string) => {
   const systems = new SystemsApi(config)
   const { data } = await systems.getSystemWaypoints(systemSymbol)

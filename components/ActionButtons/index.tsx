@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
 import { Survey } from '../../packages/space-sdk'
 
 import { orbitShip, dockShip, navigateShip, extractResources, refuelShip, } from '../../api'
@@ -51,7 +51,13 @@ export const DockShip = ({shipSymbol}: {shipSymbol: string}) => {
 }
 
 export const Mine = ({shipSymbol, survey}: {shipSymbol: string; survey?: Survey}) => {
-  const mutation = useMutation({mutationFn: extractResources})
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: extractResources,
+    onSuccess: () => {
+        queryClient.invalidateQueries({queryKey: ['shipCooldown', shipSymbol]})
+      }
+  })
   return (
     <button 
       onClick={() => mutation.mutate({shipSymbol, survey})}
