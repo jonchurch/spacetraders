@@ -1,4 +1,4 @@
-import { ContractsApi, FleetApi, Ship, Survey, SystemsApi, createConfiguration } from './packages/space-sdk'
+import { ContractsApi, FleetApi, Ship, ShipCargo, ShipCargoItem, Survey, SystemsApi, createConfiguration } from './packages/space-sdk'
 
 export const config = createConfiguration({
   authMethods: {
@@ -61,7 +61,26 @@ export const getShipCooldown= async (shipSymbol: string) => {
   if (res) {
     return res.data
   }
-  throw new Error('Hmm, no response from getShipCooldown')
+  return false
+}
+
+export const sellCargo = async ({shipSymbol, cargoSymbol, units} : {shipSymbol: string, cargoSymbol: string, units: number}) => {
+  const fleet = new FleetApi(config)
+  const {data} = await fleet.sellCargo(shipSymbol, {symbol: cargoSymbol, units})
+  return data
+}
+
+export const sellAllCargo = async ({shipSymbol, inventory}: {shipSymbol: string, inventory: ShipCargoItem[]}) => {
+  let data = []
+  for (const inv of inventory) {
+    try {
+      const res = await sellCargo({shipSymbol, cargoSymbol: inv.symbol, units: inv.units})
+        data.push(res)
+    } catch (err) {
+      data.push(err)
+    }
+  }
+  return data
 }
 
 export const getSystemWaypoints = async (systemSymbol: string) => {
