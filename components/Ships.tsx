@@ -3,9 +3,9 @@ import { Ship, Waypoint, WaypointTrait } from '../packages/space-sdk'
 
 import { getShipCooldown, getShips, getSystemWaypoints } from '../api'
 import { useQuery, } from '@tanstack/react-query';
-import { displayFuel, fuelFull, hasMarketplace, isFuelFull } from './utils';
+import { displayFuel, hasMarketplace, isFuelFull } from './utils';
 import { Countdown } from './Countdown';
-import { DockShip, Mine, NavigateShip,  OrbitShip, Refuel } from './ActionButtons';
+import { DockShip, Mine, NavigateShip,  OrbitShip, Refuel, SellAllCargo } from './ActionButtons';
 
 export const ShipCard = ({ship}: {ship: Ship}) => {
   const { systemSymbol, waypointSymbol } = ship.nav
@@ -15,6 +15,7 @@ export const ShipCard = ({ship}: {ship: Ship}) => {
     queryFn: () => getSystemWaypoints(systemSymbol),
     select: (waypoints) => waypoints.find((wp) => wp.symbol === waypointSymbol)
   })
+  console.log({shipSymbol})
   const { data: cooldown } = useQuery({
     queryKey: ['shipCooldown', shipSymbol],
     queryFn: () => getShipCooldown(shipSymbol)
@@ -32,15 +33,19 @@ export const ShipCard = ({ship}: {ship: Ship}) => {
       <p className='text-sm'>Fuel: {displayFuel(ship.fuel.current, ship.fuel.capacity)} {(100 * ship.fuel.current) / ship.fuel.capacity}%</p>
       <p className="text-sm">Status: {ship.nav.status}</p>
       <p className="text-sm">Flight mode: {ship.nav.flightMode}</p>
+      <p className="text-sm">Cargo: {`${ship.cargo.units}/${ship.cargo.capacity}`}</p>
+      {cooldown && <Countdown label='Cooldown' hideWhenComplete={false} targetDate={cooldown?.expiration} />}
       <ShipControls ship={ship} waypoint={waypoint}/>
       {ship.nav.status === 'IN_TRANSIT' && 
-        <Countdown hideWhenComplete={false} targetDate={ship.nav.route.arrival}/>
+        <Countdown label='Transit' hideWhenComplete={false} targetDate={ship.nav.route.arrival}/>
       }
+
     </div>
   )
 }
 
 export const ShipControls = ({ship, waypoint}: {ship: Ship; waypoint?: Waypoint}) => {
+  console.log(ship.cargo)
   return (
     <div>
       {ship.nav.status === 'DOCKED' && (
@@ -54,6 +59,9 @@ export const ShipControls = ({ship, waypoint}: {ship: Ship; waypoint?: Waypoint}
       }
       {ship.nav.status === "DOCKED" && !isFuelFull(ship) && hasMarketplace(waypoint) && 
         <Refuel shipSymbol={ship.symbol}/>
+      }
+      {ship.nav.status === "DOCKED" && ship.cargo.units > 0 && 
+        <SellAllCargo ship={ship}/>
       }
       {waypoint?.type === "ASTEROID_FIELD" && 
         <Mine shipSymbol={ship.symbol}/>

@@ -2,11 +2,15 @@ import { useEffect, useState } from 'react';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import differenceInSeconds from 'date-fns/differenceInSeconds';
 
-type CountdownProps = {targetDate: Date, hideWhenComplete: boolean}
+type CountdownProps = {
+  targetDate: Date,
+  hideWhenComplete: boolean,
+  label?: string
+}
 
 const MINUTES_IN_SECONDS = 60
 
-export const Countdown = ({ targetDate, hideWhenComplete = true}: CountdownProps) => {
+export const Countdown = ({ targetDate, label, hideWhenComplete = true}: CountdownProps) => {
   const [timeLeft, setTimeLeft] = useState<string>(formatDistanceToNow(targetDate))
 
   useEffect(() => {
@@ -33,7 +37,7 @@ export const Countdown = ({ targetDate, hideWhenComplete = true}: CountdownProps
     return <span className='text-sm'>Complete</span>
   }
   return (
-    <span>{timeLeft}</span>
+    <span>{label} {timeLeft}</span>
   );
 };
 

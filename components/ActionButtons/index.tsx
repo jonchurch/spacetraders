@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
-import { Survey } from '../../packages/space-sdk'
+import { Ship, Survey } from '../../packages/space-sdk'
 
-import { orbitShip, dockShip, navigateShip, extractResources, refuelShip, } from '../../api'
+import { orbitShip, dockShip, navigateShip, extractResources, refuelShip, sellAllCargo, } from '../../api'
 import { useState } from "react"
 
 export const Refuel = ({shipSymbol} : {shipSymbol: string}) => {
@@ -18,6 +18,21 @@ export const Refuel = ({shipSymbol} : {shipSymbol: string}) => {
       className='bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded'
     >Refuel</button>
 }
+
+export const SellAllCargo = ({ship}: {ship: Ship}) => {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: sellAllCargo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ['ships']})
+    },
+  })
+  return <button 
+      onClick={() => mutation.mutate({shipSymbol: ship.symbol, inventory: ship.cargo.inventory})}
+      className='bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded'
+    >Sell All</button>
+}
+
 export const OrbitShip = ({shipSymbol}: {shipSymbol: string}) => {
   const queryClient = useQueryClient()
   const mutation = useMutation({
