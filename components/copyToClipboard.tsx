@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Copy = ({ emoji, toCopy }) => {
+const Copy = ({ emoji, toCopy }: {emoji: string, toCopy: string}) => {
     const [copied, setCopied] = useState(false);
 
     const copyToClipboard = () => {
