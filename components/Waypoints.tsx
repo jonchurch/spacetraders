@@ -41,7 +41,7 @@ export const Waypoints: FC<WaypointsProps> = ({ waypointsData }) => {
                         {waypoint.chart && (<>
             <p className="text-sm">Waypoint Symbol: {waypoint.chart.waypointSymbol}</p>
             <p className="text-sm">Submitted By: {waypoint.chart.submittedBy}</p>
-            <p className="text-sm">Submitted On: {format(waypoint.chart.submittedOn ?? 0, 'dd/MM/yyyy hh:mm')}</p>
+            <p className="text-sm">Submitted On: {format(new Date(waypoint.chart.submittedOn ?? 0), 'dd/MM/yyyy hh:mm')}</p>
                     </>)}
           </div>
         </div>

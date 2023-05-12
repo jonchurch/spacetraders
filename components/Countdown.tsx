@@ -3,7 +3,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import differenceInSeconds from 'date-fns/differenceInSeconds';
 
 type CountdownProps = {
-  targetDate: Date,
+  targetDate: string,
   hideWhenComplete: boolean,
   label?: string
 }
@@ -11,7 +11,7 @@ type CountdownProps = {
 const MINUTES_IN_SECONDS = 60
 
 export const Countdown = ({ targetDate, label, hideWhenComplete = true}: CountdownProps) => {
-  const [timeLeft, setTimeLeft] = useState<string>(formatDistanceToNow(targetDate))
+  const [timeLeft, setTimeLeft] = useState<string>(formatDistanceToNow(new Date(targetDate)))
 
   useEffect(() => {
     // Update the time left every second
