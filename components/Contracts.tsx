@@ -1,13 +1,12 @@
 'use client'
 import { useEffect, useState } from 'react';
-import { Contract, ContractsApi } from '@/packages/space-sdk';
+import { Contract, ContractsApi } from '@spacejunk/airlock';
 import {config} from '../api'
 
 import { ContractCard } from './ContractCard';
 
 export const Contracts = () => {
     const [contracts, setContracts] = useState<Contract[]>([]);
-
     useEffect(() => {
         const fetchContracts = async () => {
             const contractApi = new ContractsApi(config)
