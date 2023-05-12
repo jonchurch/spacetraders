@@ -1,5 +1,5 @@
-import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
-import { Ship, Survey } from '../../packages/space-sdk'
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Ship, Survey } from '@spacejunk/airlock'
 
 import { orbitShip, dockShip, navigateShip, extractResources, refuelShip, sellAllCargo, } from '../../api'
 import { useState } from "react"

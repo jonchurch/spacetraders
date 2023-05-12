@@ -1,5 +1,5 @@
 'use client'
-import { Ship, Waypoint, WaypointTrait } from '../packages/space-sdk'
+import { Ship, Waypoint, WaypointTrait } from '@spacejunk/airlock'
 
 import { getShipCooldown, getShips, getSystemWaypoints } from '../api'
 import { useQuery, } from '@tanstack/react-query';

@@ -11,7 +11,7 @@
 // 🟨🟨🟨⬜️⬜️
 // 🟥🟥⬜️⬜️⬜️
 
-import { Ship, Waypoint } from "@/packages/space-sdk";
+import { Ship, Waypoint } from "@spacejunk/airlock"
 
 // but I'd like to give more fidelity in the measurement, since fuel is important!
 export const displayFuel = (current: number, capacity: number)=> {

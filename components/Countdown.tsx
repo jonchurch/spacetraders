@@ -4,7 +4,7 @@ import differenceInSeconds from 'date-fns/differenceInSeconds';
 
 type CountdownProps = {
   targetDate: string,
-  hideWhenComplete: boolean,
+  hideWhenComplete?: boolean,
   label?: string
 }
 

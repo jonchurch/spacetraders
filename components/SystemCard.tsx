@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { System } from '@/packages/space-sdk';
+import { System } from '@spacejunk/airlock'
 import Copy from './copyToClipboard';
 
 type SystemCardProps = {

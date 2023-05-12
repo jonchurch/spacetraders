@@ -4,7 +4,7 @@ import { SystemCard } from './SystemCard'
 import { Waypoints } from './Waypoints'
 
 import { getSystemAndWaypoints } from '@/api'
-import { System, Waypoint } from '@/packages/space-sdk'
+import { System, Waypoint } from '@spacejunk/airlock'
 
 export const SystemInfo = ({systemSymbol}: {systemSymbol: string}) => {
     const [systemData, setSystemData] = useState<System>()

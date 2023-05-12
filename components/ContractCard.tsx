@@ -1,6 +1,6 @@
 'use client'
 import React, { useCallback } from 'react'
-import { Contract } from '@/packages/space-sdk';
+import { Contract } from '@spacejunk/airlock'
 import { Countdown } from './Countdown';
 
 import { acceptContract } from '@/api';

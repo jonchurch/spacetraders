@@ -1,7 +1,6 @@
 'use client'
-import { Shipyard } from '@/packages/space-sdk/dist';
+import { Shipyard } from '@spacejunk/airlock'
 import { FC, useEffect, useState } from 'react';
-import format from 'date-fns/format';
 
 import { getShipyard } from '@/api';
 

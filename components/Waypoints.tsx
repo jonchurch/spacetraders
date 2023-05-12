@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Waypoint } from '@/packages/space-sdk';
+import { Waypoint } from '@spacejunk/airlock'
 import format from 'date-fns/format';
 import Link from 'next/link';
 
