@@ -30,7 +30,7 @@ export const ShipCard = ({ship}: {ship: Ship}) => {
       <p className={`text-sm ${transiting && 'animate-pulse text-orange-300'}`}>Waypoint: {ship.nav.waypointSymbol}</p>
       {/* lets display the location type for each ship */}
       <p className={`text-sm ${transiting && 'text-orange-300'}`}>Location: {waypoint?.type}</p>
-      <p className='text-sm'>Fuel: <span className={`${transiting ? 'animate-pulse' : null}`}>{displayFuel(ship.fuel.current, ship.fuel.capacity)} {(100 * ship.fuel.current) / ship.fuel.capacity}%</span></p>
+      <p className='text-sm'>Fuel: <span className={`${transiting ? 'animate-pulse' : null}`}>{displayFuel(ship.fuel.current, ship.fuel.capacity)} {Math.round((100 * ship.fuel.current) / ship.fuel.capacity)}%</span></p>
       <p className="text-sm">Status: {ship.nav.status}</p>
       <p className="text-sm">Flight mode: {ship.nav.flightMode}</p>
       <p className="text-sm">Cargo: {`${ship.cargo.units}/${ship.cargo.capacity}`}</p>
