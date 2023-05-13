@@ -7,7 +7,6 @@ const Copy = ({ emoji, toCopy }: {emoji: string, toCopy: string}) => {
         navigator.clipboard.writeText(toCopy)
             .then(() => {
                 setCopied(true);
-
                 // reset the copied status after 2 seconds
                 setTimeout(() => {
                     setCopied(false);

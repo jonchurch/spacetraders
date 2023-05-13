@@ -1,10 +1,10 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { SystemCard } from './SystemCard'
 import { Waypoints } from './Waypoints'
 
 import { getSystemAndWaypoints } from '@/api'
-import { System, Waypoint } from '@spacejunk/airlock'
+import { Waypoint } from '@spacejunk/airlock'
 import Copy from './copyToClipboard'
 import { useQuery } from '@tanstack/react-query'
 
@@ -12,10 +12,11 @@ export const Asteroids = ({waypoints}: {waypoints: Waypoint[]}) => {
     console.log({waypoints})
   const asteroids = waypoints.map(({symbol, type}) => {
   if (type === "ASTEROID_FIELD") {
-      return <p key={symbol}>
-        {symbol}
+      return (
+    <span key={symbol}>
+        <p>{symbol}</p>
         <Copy emoji={"💎"} toCopy={symbol} />
-      </p>
+    </span>)
     }
   })
 
