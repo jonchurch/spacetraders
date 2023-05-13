@@ -1,8 +1,21 @@
+import { useCallback, useEffect, useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Ship, Survey } from '@spacejunk/airlock'
 
-import { orbitShip, dockShip, navigateShip, extractResources, refuelShip, sellAllCargo, } from '../../api'
-import { useState } from "react"
+import { orbitShip, dockShip, navigateShip, extractResources, refuelShip, sellAllCargo, badRequest, } from '../../api'
+
+export const MakeError = () => {
+  const handleClick = useCallback(() => {
+    badRequest()
+      .catch((err: unknown) => console.log(err))
+  }, [])
+  return (
+  <button 
+      className='bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded'
+      onClick={handleClick}
+    >Bad!</button>
+  )
+}
 
 export const Refuel = ({shipSymbol} : {shipSymbol: string}) => {
   const queryClient = useQueryClient()

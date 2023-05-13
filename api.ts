@@ -10,6 +10,15 @@ import {
 export const config = new Configuration({
   accessToken: process.env.TOKEN,
 });
+export const badRequest = async () => {
+  const fleet = new FleetApi(config);
+  const res = await fleet.getShipCooldown('asdfasdfasa');
+  console.log({res})
+  if (res) {
+    return res.data;
+  }
+  return false;
+};
 
 export const getShips = async () => {
   const fleet = new FleetApi(config);
