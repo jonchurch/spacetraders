@@ -4,11 +4,19 @@ import { Contract } from '@spacejunk/airlock'
 import { Countdown } from './Countdown';
 
 import { acceptContract } from '@/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const ContractCard = ({ contract }: {contract: Contract}) => {
-    const handleClick = useCallback(() => {
-        acceptContract(contract.id)
-    }, [contract])
+    const queryClient = useQueryClient()
+    const mutation = useMutation({
+        mutationFn: acceptContract,
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['contracts'] })
+        },
+    })
+    const handleClick = () => {
+        mutation.mutate(contract.id)
+    }
 
     return (
         <div className="rounded-lg shadow-md p-6 mb-4">

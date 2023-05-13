@@ -158,6 +158,11 @@ export const getShipyard = async ({
     console.log(err);
   }
 };
+export const getContracts = async () => {
+  const contracts = new ContractsApi(config);
+  const { data } = await contracts.getContracts()
+  return data
+}
 export const acceptContract = async (contractId: string) => {
   const contractApi = new ContractsApi(config);
   try {

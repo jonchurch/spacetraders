@@ -7,7 +7,7 @@ import { getSystemAndWaypoints } from '@/api'
 import { MakeError } from '@/components/ActionButtons'
 
 export default function Home() {
-  const systemSymbol = 'X1-DF55'
+  const systemSymbol = 'X1-DC54'
     const { data } = useQuery({
         queryKey: ['systemAndWaypoints', systemSymbol],
         queryFn: () => getSystemAndWaypoints(systemSymbol)
