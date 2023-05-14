@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { Ship, Survey } from '@spacejunk/airlock'
+import { PurchaseShipRequest, Ship, Survey } from '@spacejunk/airlock'
 
-import { orbitShip, dockShip, navigateShip, extractResources, refuelShip, sellAllCargo, badRequest, } from '../../api'
+import { orbitShip, dockShip, navigateShip, extractResources, refuelShip, sellAllCargo, badRequest, purchaseShip, } from '../../api'
 import { run } from "@/test"
 
 export const MakeError = () => {
@@ -16,6 +16,21 @@ export const MakeError = () => {
       onClick={handleClick}
     >Bad!</button>
   )
+}
+
+export const PurchaseShip = ({waypointSymbol, shipType, disabled}: PurchaseShipRequest & {disabled?: boolean}) => {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: purchaseShip,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ships']})
+    }
+  })
+  return <button 
+        disabled={disabled}
+        onClick={() => mutation.mutate({waypointSymbol, shipType})}
+        className='bg-green-500 hover:bg-green-700 disabled:bg-gray-500 text-white font-bold py-1 px-2 rounded'
+      >Purchase</button>
 }
 
 export const Refuel = ({shipSymbol} : {shipSymbol: string}) => {

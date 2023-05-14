@@ -1,7 +1,10 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import Image from 'next/image';
 import { classNames } from './utils'
+import { useQuery } from '@tanstack/react-query';
+import { getAgent } from '@/api';
 
 const user = {
   name: 'Tom Cook',
@@ -22,22 +25,54 @@ const userNavigation = [
   { name: 'Sign out', href: '#' },
 ]
 
+
+// const stats = [
+//   { name: 'Credits', value: '405' },
+//   { name: 'req/s', value: '3.65', unit: 'mins' },
+//   { name: 'Number of servers', value: '3' },
+// ]
+
+export const Stats = () => {
+  const { data } = useQuery({
+    queryFn: getAgent,
+    queryKey: ['agent']
+  })
+  const stats = [
+  { name: 'Credits', value: new Intl.NumberFormat().format(data?.credits ?? 0) },
+  { name: 'req/s', value: '3.65', unit: 'mins' },
+
+  ]
+  return (
+    <div className="bg-gray-900 rounded-md">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2 lg:grid-cols-4">
+          {stats.map((stat) => (
+            <div key={stat.name} className="bg-gray-900 px-4 py-6 sm:px-6 lg:px-8">
+              <p className="text-sm font-medium leading-6 text-gray-400">{stat.name}</p>
+              <p className="mt-2 flex items-baseline gap-x-2">
+                <span className="text-4xl font-semibold tracking-tight text-white">{stat.value}</span>
+                {stat.unit ? <span className="text-sm text-gray-400">{stat.unit}</span> : null}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function AppShell() {
   return (
     <>
       <div className="min-h-full">
-        <Disclosure as="nav" className="bg-gray-800">
+        <Disclosure as="nav" className="bg-gray-950">
           {({ open }) => (
             <>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <img
-                        className="h-8 w-8"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
-                      />
+                      <span className="text-lg">{'🚀 💫'}</span>
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
@@ -47,7 +82,7 @@ export default function AppShell() {
                             href={item.href}
                             className={classNames(
                               item.current
-                                ? 'bg-gray-900 text-white'
+                                ? 'bg-gray-800 text-white'
                                 : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                               'rounded-md px-3 py-2 text-sm font-medium'
                             )}
@@ -68,43 +103,6 @@ export default function AppShell() {
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
-
-                      {/* Profile dropdown */}
-                      <Menu as="div" className="relative ml-3">
-                        <div>
-                          <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span className="sr-only">Open user menu</span>
-                            <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
-                          </Menu.Button>
-                        </div>
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map((item) => (
-                              <Menu.Item key={item.name}>
-                                {({ active }) => (
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      active ? 'bg-gray-100' : '',
-                                      'block px-4 py-2 text-sm text-gray-700'
-                                    )}
-                                  >
-                                    {item.name}
-                                  </a>
-                                )}
-                              </Menu.Item>
-                            ))}
-                          </Menu.Items>
-                        </Transition>
-                      </Menu>
                     </div>
                   </div>
                   <div className="-mr-2 flex md:hidden">
@@ -173,9 +171,10 @@ export default function AppShell() {
           )}
         </Disclosure>
 
-        <header className="bg-white shadow-sm">
+        <header className="bg-gray-950 shadow-sm">
           <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-            <h1 className="text-lg font-semibold leading-6 text-gray-900">Dashboard</h1>
+            <Stats />
+            <h1 className="text-lg font-semibold leading-6 text-white-900">Dashboard</h1>
           </div>
         </header>
       </div>

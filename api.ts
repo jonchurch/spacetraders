@@ -1,7 +1,10 @@
 import {
+    AgentsApi,
   Configuration,
   ContractsApi,
   FleetApi,
+  GetShipyardRequest,
+  PurchaseShipRequest,
   ShipCargoItem,
   Survey,
   SystemsApi,
@@ -19,6 +22,21 @@ export const badRequest = async () => {
   }
   return false;
 };
+
+export const getAgent = async () => {
+  const agent = new AgentsApi(config)
+  const { data } = await agent.getMyAgent()
+  return data
+}
+
+export const purchaseShip = async ({shipType, waypointSymbol}: PurchaseShipRequest) => {
+  const fleet = new FleetApi(config);
+  const { data } = await fleet.purchaseShip({
+    shipType,
+    waypointSymbol
+  })
+  return data
+}
 
 export const getShips = async () => {
   const fleet = new FleetApi(config);
@@ -146,17 +164,10 @@ export const getSystemAndWaypoints = async (systemSymbol: string) => {
 export const getShipyard = async ({
   systemSymbol,
   waypointSymbol,
-}: {
-  systemSymbol: string;
-  waypointSymbol: string;
-}) => {
+}: GetShipyardRequest) => {
   const systems = new SystemsApi(config);
-  try {
-    const { data } = await systems.getShipyard(systemSymbol, waypointSymbol);
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
+  const { data } = await systems.getShipyard(systemSymbol, waypointSymbol);
+  return data;
 };
 export const getContracts = async () => {
   const contracts = new ContractsApi(config);

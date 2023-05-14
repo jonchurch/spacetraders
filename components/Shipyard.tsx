@@ -2,7 +2,9 @@
 import { Shipyard } from '@spacejunk/airlock'
 import { FC, useEffect, useState } from 'react';
 
-import { getShipyard } from '@/api';
+import { getAgent, getShipyard } from '@/api';
+import { PurchaseShip } from './ActionButtons';
+import { useQuery } from '@tanstack/react-query';
 
 interface ShipyardMenuProps {
   shipyardData: Shipyard
@@ -15,29 +17,24 @@ type ShipyardProps = {
 
 // Shipyard component that fetches data and displays it in a ShipyardMenu component
 export const WaypointShipyard: FC<ShipyardProps> = ({systemSymbol, waypointSymbol}) => {
-    const [shipyardData, setShipyardData] = useState<Shipyard | undefined>()
-    useEffect(() => {
-        async function getShipyardData() {
-            try {
-                const shipyardData = await getShipyard({systemSymbol, waypointSymbol})
-        console.log({shipyardData})
-                setShipyardData(shipyardData)
-            } catch(err) {
-                console.log(err)
-            }
-        }
-        getShipyardData()
-    }, [systemSymbol, waypointSymbol])
-    if (!shipyardData) {
-        return null
-    }
+  const { data: shipyardData } = useQuery({
+    queryFn: () => getShipyard({systemSymbol, waypointSymbol}),
+    queryKey: ['shipyard', waypointSymbol]
+  })
+  if (!shipyardData) {
+    return null
+  }
     return (
-<ShipyardMenu shipyardData={shipyardData} />
+    <ShipyardMenu shipyardData={shipyardData} />
     )
 }
 
 export const ShipyardMenu: FC<ShipyardMenuProps> = ({ shipyardData }) => {
   console.log({shipyardData})
+  const { data: agentData } = useQuery({
+    queryFn: getAgent,
+    queryKey: ['agent']
+  })
   return (
     <div className="bg-gray-900 rounded-lg shadow-md p-6 mb-4 text-white">
       <h2 className="text-xl font-bold mb-2">Shipyard: {shipyardData.symbol}</h2>
@@ -72,6 +69,8 @@ export const ShipyardMenu: FC<ShipyardMenuProps> = ({ shipyardData }) => {
           <p>Symbol: {ship.frame.symbol}</p>
           <p>Name: {ship.frame.name}</p>
           <p>Description: {ship.frame.description}</p>
+            {ship.type 
+              && <PurchaseShip disabled={(agentData?.credits ?? 0) < ship.purchasePrice} shipType={ship.type} waypointSymbol={shipyardData.symbol}/>}
           {/* Add more details for frame, reactor, engine, modules, mounts */}
         </div>
       ))}
