@@ -38,6 +38,9 @@ export const displayFuel = (current: number, capacity: number)=> {
 
     return fuelDisplay;
 }
+export function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ')
+}
 
 export const hasMarketplace = (waypoint?: Waypoint): boolean => 
     (waypoint && waypoint.traits.some(({symbol}) => symbol === "MARKETPLACE")) ?? false;
