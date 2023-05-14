@@ -3,11 +3,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Ship, Survey } from '@spacejunk/airlock'
 
 import { orbitShip, dockShip, navigateShip, extractResources, refuelShip, sellAllCargo, badRequest, } from '../../api'
+import { run } from "@/test"
 
 export const MakeError = () => {
   const handleClick = useCallback(() => {
-    badRequest()
-      .catch((err: unknown) => console.log(err))
+    run()
+      // .catch((err: unknown) => console.log(err.data))
   }, [])
   return (
   <button 
