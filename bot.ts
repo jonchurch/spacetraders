@@ -18,8 +18,7 @@ const rateLimitedAxiosQueue = new RequestQueue({
 
 // pass axios instance with rate limit queue
 const systems = new SystemsApi(configuration, undefined, rateLimitedAxiosQueue.getInstance())
-
-let currentSystem: System | null = null
+// let currentSystem: System | null = null
 
 async function run() {
   for (let i = 0; i < 20; i++) {
