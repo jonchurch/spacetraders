@@ -10,6 +10,7 @@ import { DockShip, Mine, NavigateShip,  OrbitShip, Refuel, SellAllCargo } from '
 export const ShipCard = ({ship}: {ship: Ship}) => {
   const { systemSymbol, waypointSymbol } = ship.nav
   const shipSymbol = ship.symbol
+
   const { data: waypoint } = useQuery({
     queryKey: ['waypoints', ],
     queryFn: () => getSystemWaypoints(systemSymbol),
@@ -17,8 +18,10 @@ export const ShipCard = ({ship}: {ship: Ship}) => {
   })
   const { data: cooldown } = useQuery({
     queryKey: ['shipCooldown', shipSymbol],
-    queryFn: () => getShipCooldown(shipSymbol)
+    queryFn: () => getShipCooldown(shipSymbol),
+    staleTime: Infinity
   })
+  console.log(`${shipSymbol}: ${cooldown}`)
   const transiting = ship.nav.status === "IN_TRANSIT"
   return (
     <div key={shipSymbol} className="border p-4 m-2">

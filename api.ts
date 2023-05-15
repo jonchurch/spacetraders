@@ -16,11 +16,10 @@ export const config = new Configuration({
 export const badRequest = async () => {
   const fleet = new FleetApi(config);
   const res = await fleet.getShipCooldown('asdfasdfasa');
-  console.log({res})
   if (res) {
     return res.data;
   }
-  return false;
+  return undefined
 };
 
 export const getAgent = async () => {
@@ -95,11 +94,13 @@ export const refuelShip = async (shipSymbol: string) => {
 
 export const getShipCooldown = async (shipSymbol: string) => {
   const fleet = new FleetApi(config);
+  console.log("SANITY")
   const res = await fleet.getShipCooldown(shipSymbol);
+  console.log('=================cooldown res:', res)
   if (res) {
     return res.data;
   }
-  return false;
+  return undefined
 };
 
 export const sellCargo = async ({
@@ -150,15 +151,11 @@ export const getSystemWaypoints = async (systemSymbol: string) => {
 
 export const getSystemAndWaypoints = async (systemSymbol: string) => {
   const systems = new SystemsApi(config);
-  try {
-    const { data: systemData } = await systems.getSystem(systemSymbol);
-    const { data: waypointData } = await systems.getSystemWaypoints(
-      systemSymbol
-    );
-    return { systemData, waypointData };
-  } catch (err) {
-    console.log(err);
-  }
+  const { data: systemData } = await systems.getSystem(systemSymbol);
+  const { data: waypointData } = await systems.getSystemWaypoints(
+    systemSymbol
+  );
+  return { systemData, waypointData };
 };
 
 export const getShipyard = async ({
@@ -168,6 +165,7 @@ export const getShipyard = async ({
   const systems = new SystemsApi(config);
   const { data } = await systems.getShipyard(systemSymbol, waypointSymbol);
   return data;
+
 };
 export const getContracts = async () => {
   const contracts = new ContractsApi(config);
