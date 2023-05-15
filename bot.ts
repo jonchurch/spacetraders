@@ -1,11 +1,12 @@
 import axios from 'axios'
 import { Configuration, Ship, System, SystemsApi } from 'spacetraders-api'
 import RequestQueue from './axiosRequestQueue'
+import env from './.env.js'
 
 const instance = axios.create()
 const configuration = new Configuration({
   // read token from environment variables
-  accessToken: process.env.TOKEN
+  accessToken: env.TOKEN
 })
 
  // create rate limit queue
@@ -23,7 +24,7 @@ const systems = new SystemsApi(configuration, undefined, rateLimitedAxiosQueue.g
 async function run() {
   for (let i = 0; i < 20; i++) {
     console.log(`Running: ${i}`)
-    systems.getSystem(process.env.HOME_SYSTEM ?? "X1-DC54")
+    systems.getSystem(env.HOME_SYSTEM)
   }
 }
 
