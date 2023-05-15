@@ -1,16 +1,25 @@
-// requestQueue.ts
-import axios, { AxiosResponse, Method } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 
-interface Request {
-  url: string;
-  method: Method;
+interface Job {
+  id: string;
+  createdAt: string;
+  status: 'queued' | 'processing' | 'completed' | 'failed';
+  priority?: number;
+  retryCount?: number;
   data?: any;
-  resolve: (value: AxiosResponse) => void;
-  reject: (reason?: any) => void;
+  execute: () => void;
+}
+
+type ConstructArgs = {
+  maxRequestsPerSecond: number,
+  burstRequests: number,
+  burstTime: number;
+  instance: AxiosInstance
 }
 
 class RequestQueue {
-  private queue: Request[];
+  private instance: AxiosInstance;
+  private queue: Job[];
   private maxRequestsPerSecond: number;
   private burstRequests: number;
   private burstTime: number;
@@ -18,7 +27,7 @@ class RequestQueue {
   private burstRequestsMade: number;
   private sending: boolean;
 
-  constructor(maxRequestsPerSecond: number, burstRequests: number, burstTime: number) {
+  constructor({maxRequestsPerSecond, burstRequests, burstTime, instance}: ConstructArgs) {
     this.queue = [];
     this.maxRequestsPerSecond = maxRequestsPerSecond;
     this.burstRequests = burstRequests;
@@ -26,25 +35,9 @@ class RequestQueue {
     this.requestsMade = 0;
     this.burstRequestsMade = 0;
     this.sending = false;
-  }
 
-  async sendRequest(url: string, method: Method = 'get', data: any = {}): Promise<AxiosResponse> {
-    return new Promise((resolve, reject) => {
-      const request: Request = {
-        url,
-        method,
-        data,
-        resolve,
-        reject,
-      };
-
-      this.queue.push(request);
-
-      if (!this.sending) {
-        this.sending = true;
-        this.processQueue();
-      }
-    });
+    this.instance = instance ?? axios.create();
+    this.addRequestInterceptor();
   }
 
   private async processQueue() {
@@ -57,19 +50,19 @@ class RequestQueue {
       this.requestsMade < this.maxRequestsPerSecond ||
       this.burstRequestsMade < this.burstRequests
     ) {
-      const { url, method, data, resolve, reject } = this.queue.shift() as Request;
-
+      const { execute } = this.queue.shift() as Job;
+      
       try {
-        const response = await axios({ url, method, data });
-        resolve(response);
-
         if (this.burstRequestsMade < this.burstRequests) {
           this.burstRequestsMade++;
         } else {
           this.requestsMade++;
         }
+        execute()
       } catch (error) {
-        reject(error);
+        // we retry if we hit an error
+        // Idk what axios does when we throw in the interceptor
+        console.log(error)
       }
     }
 
@@ -93,6 +86,55 @@ class RequestQueue {
 
     return delayBetweenRequests;
   }
+  private handleRequestSent() {
+      if (this.burstRequestsMade < this.burstRequests) {
+        this.burstRequestsMade++;
+      } else {
+        this.requestsMade++;
+      }
+
+      setTimeout(() => {
+        this.requestsMade = 0;
+      }, 1000);
+
+      setTimeout(() => {
+        this.burstRequestsMade = 0;
+      }, this.burstTime * 1000);
+    }
+  // should also ad a response interceptor to update 
+  // the queue information based on returned rate limit data
+  private addRequestInterceptor() {
+    this.instance.interceptors.request.use(async (config: AxiosRequestConfig) => {
+      return new Promise<AxiosRequestConfig>(async (resolve) => {
+        const executeJob = () => {
+          resolve(config);
+          this.handleRequestSent();
+        };
+        const newJob: Job = {
+          id: this.generateUniqueId(),
+          createdAt: new Date().toISOString(),
+          status: 'queued',
+          execute: executeJob,
+        };
+        
+        this.queue.push(newJob);
+          
+        if (!this.sending) {
+          this.sending = true;
+          this.processQueue();
+        }
+      });
+    });
+      
+  }
+    private generateUniqueId(): string {
+      return (
+        Date.now().toString(36) + Math.random().toString(36).substr(2, 5)
+      ).toUpperCase();
+    }
+    getInstance(): AxiosInstance {
+      return this.instance;
+    }
 }
 
 export default RequestQueue;
