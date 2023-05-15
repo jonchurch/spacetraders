@@ -1,5 +1,7 @@
+import fs from 'fs'
 import axios from 'axios'
-import { Configuration, Ship, System, SystemsApi } from 'spacetraders-api'
+import chalk from 'chalk'
+import { Configuration, SystemsApi } from 'spacetraders-api'
 import RequestQueue from './axiosRequestQueue'
 import env from './.env.js'
 
@@ -21,16 +23,22 @@ const rateLimitedAxiosQueue = new RequestQueue({
 const systems = new SystemsApi(configuration, undefined, rateLimitedAxiosQueue.getInstance())
 // let currentSystem: System | null = null
 
+process.on('exit', () => {
+  const requestLogs = rateLimitedAxiosQueue.exportRequestLogs()
+  fs.writeFileSync('run.json', JSON.stringify(requestLogs, null, 2));
+})
+
 async function run() {
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 40; i++) {
     console.log(`Running: ${i}`)
     systems.getSystem(env.HOME_SYSTEM)
       .then(res => {
-        // const burst = res.headers['x-ratelimit-limit-burst']
         const remaining = res.headers['x-ratelimit-remaining']
         const reset = res.headers['x-ratelimit-reset']
+        console.log('')
         console.log(`${i}:${res.status}: Remaining:${remaining} reset:${Math.abs(new Date(reset).getTime() - new Date().getTime())}`)
     })
+      .catch((err: Error) => console.log(chalk.red(err.message)))
   }
 }
 

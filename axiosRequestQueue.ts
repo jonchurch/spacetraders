@@ -26,6 +26,9 @@ class RequestQueue {
   private requestsMade: number;
   private burstRequestsMade: number;
   private sending: boolean;
+  private burstTimer: NodeJS.Timeout | null
+  private rateTimer: NodeJS.Timeout | null
+  private requestLogs: {time: string}[]
 
   constructor({maxRequestsPerSecond, burstRequests, burstTime, instance}: ConstructArgs) {
     this.queue = [];
@@ -35,6 +38,9 @@ class RequestQueue {
     this.requestsMade = 0;
     this.burstRequestsMade = 0;
     this.sending = false;
+    this.burstTimer = null
+    this.rateTimer = null
+    this.requestLogs = []
 
     this.instance = instance ?? axios.create();
     this.addRequestInterceptor();
@@ -46,29 +52,31 @@ class RequestQueue {
       return;
     }
 
-    if (
-      this.requestsMade < this.maxRequestsPerSecond ||
-      this.burstRequestsMade < this.burstRequests
-    ) {
+    const canProcessBurstRequest = this.burstRequestsMade < this.burstRequests;
+    const canProcessNonBurstRequest = this.requestsMade < this.maxRequestsPerSecond;
+
+    if (canProcessBurstRequest || canProcessNonBurstRequest) {
+      console.log(`requestsMade: ${this.requestsMade} burstRequestsMade:${this.burstRequestsMade}`);
       const { execute } = this.queue.shift() as Job;
-      
+
       try {
-        if (this.burstRequestsMade < this.burstRequests) {
-          this.burstRequestsMade++;
-        } else {
-          this.requestsMade++;
-        }
-        execute()
+        execute();
+        this.handleRequestSent(); // Call after executing the job
       } catch (error) {
         // we retry if we hit an error
         // Idk what axios does when we throw in the interceptor
-        console.log(error)
+        console.log(error);
       }
     }
 
-    setTimeout(() => {
+    // If there are more requests and we haven't exhausted the burst limit, process the next request immediately
+    if (canProcessBurstRequest && this.queue.length > 0) {
       this.processQueue();
-    }, this.getRequestDelay());
+    } else {
+      setTimeout(() => {
+        this.processQueue();
+      }, this.getRequestDelay());
+    }
   }
 
   private getRequestDelay() {
@@ -76,31 +84,39 @@ class RequestQueue {
     const burstWindowReset = this.burstTime * 1000;
     const rateLimitReset = 1000;
 
-    setTimeout(() => {
-      this.requestsMade = 0;
-    }, rateLimitReset);
+    if (!this.rateTimer) {
+      this.rateTimer = setTimeout(() => {
+        this.requestsMade = 0;
+        // I think this should suffice for having a single reset for the overall called
+        this.rateTimer = null
+      }, rateLimitReset);
+    }
 
-    setTimeout(() => {
-      this.burstRequestsMade = 0;
-    }, burstWindowReset);
+   if (!this.burstTimer) {
+      // does it matter that these are on static resets?
+      // I can use the reset time on response header, but
+      // I still don't know how bursts are tracked, is the window rolling? I doubt it
+      this.burstTimer = setTimeout(() => {
+        this.burstRequestsMade = 0;
+        this.burstTimer = null
+      }, burstWindowReset);
+    }
 
     return delayBetweenRequests;
   }
+
   private handleRequestSent() {
+    const timestamp = new Date()
+    this.requestLogs.push({ time: timestamp.toISOString() });
       if (this.burstRequestsMade < this.burstRequests) {
         this.burstRequestsMade++;
       } else {
         this.requestsMade++;
       }
-
-      setTimeout(() => {
-        this.requestsMade = 0;
-      }, 1000);
-
-      setTimeout(() => {
-        this.burstRequestsMade = 0;
-      }, this.burstTime * 1000);
     }
+  public exportRequestLogs() {
+    return this.requestLogs
+  }
   // should also ad a response interceptor to update 
   // the queue information based on returned rate limit data
   private addRequestInterceptor() {
