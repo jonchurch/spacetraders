@@ -25,6 +25,12 @@ async function run() {
   for (let i = 0; i < 20; i++) {
     console.log(`Running: ${i}`)
     systems.getSystem(env.HOME_SYSTEM)
+      .then(res => {
+        // const burst = res.headers['x-ratelimit-limit-burst']
+        const remaining = res.headers['x-ratelimit-remaining']
+        const reset = res.headers['x-ratelimit-reset']
+        console.log(`${i}:${res.status}: Remaining:${remaining} reset:${Math.abs(new Date(reset).getTime() - new Date().getTime())}`)
+    })
   }
 }
 
