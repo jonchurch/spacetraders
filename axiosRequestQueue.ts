@@ -188,7 +188,11 @@ class RequestQueue {
       if (this.rateTimer) {
         clearTimeout(this.rateTimer);
       }
-
+    
+    // should I update the getDelay function to return either the normal delay
+    // or the time until reset? Whichever is longer
+    // would also depend on if we have 0 RPS left,
+    // don't wait at all if we have 1-2 RPS left, otherwise wait until the reset, right?
       this.rateTimer = setTimeout(() => {
         this.requestsMade = 0;
         this.rateTimer = null;
