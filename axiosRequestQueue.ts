@@ -29,6 +29,7 @@ class RequestQueue {
   private burstTimer: NodeJS.Timeout | null
   private rateTimer: NodeJS.Timeout | null
   private requestLogs: {time: string}[]
+  private start: number | null
 
   constructor({maxRequestsPerSecond, burstRequests, burstTime, instance}: ConstructArgs) {
     this.queue = [];
@@ -41,12 +42,15 @@ class RequestQueue {
     this.burstTimer = null
     this.rateTimer = null
     this.requestLogs = []
+    this.start = null
 
     this.instance = instance ?? axios.create();
     this.addRequestInterceptor();
   }
 
   private async processQueue() {
+    if (!this.sending) {
+    }
     if (this.queue.length === 0) {
       this.sending = false;
       return;
@@ -56,10 +60,18 @@ class RequestQueue {
     const canProcessNonBurstRequest = this.requestsMade < this.maxRequestsPerSecond;
 
     if (canProcessBurstRequest || canProcessNonBurstRequest) {
-      console.log(`requestsMade: ${this.requestsMade} burstRequestsMade:${this.burstRequestsMade}`);
+      // console.log(`requestsMade: ${this.requestsMade} burstRequestsMade:${this.burstRequestsMade}`);
       const { execute } = this.queue.shift() as Job;
 
       try {
+        if (this.queue.length === 0) {
+          // await execute()
+          if (this.start) {
+            // dang, I don't actually have the promise for the request
+            // this won't be accurate if I can't tell when it's done
+            console.log(`Queue drained after ${Date.now() - this.start}`)
+          }
+        }
         execute();
         this.handleRequestSent(); // Call after executing the job
       } catch (error) {
@@ -136,6 +148,8 @@ class RequestQueue {
         this.queue.push(newJob);
           
         if (!this.sending) {
+          console.log('starting')
+          this.start = Date.now()
           this.sending = true;
           this.processQueue();
         }
