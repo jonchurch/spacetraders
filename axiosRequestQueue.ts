@@ -165,7 +165,7 @@ class RequestQueue {
       this.instance.interceptors.response.use((response: AxiosResponse) => {
         const rateLimitRemaining = Number(response.headers['x-ratelimit-remaining']);
         const rateLimitReset = new Date(response.headers['x-ratelimit-reset']);
-
+        console.log(`${response.status}`)
         if (!isNaN(rateLimitRemaining) && !isNaN(rateLimitReset.getTime())) {
           this.updateQueue(rateLimitRemaining, rateLimitReset);
         }
