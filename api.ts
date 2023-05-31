@@ -1,5 +1,5 @@
 import {
-    AgentsApi,
+  AgentsApi,
   Configuration,
   ContractsApi,
   FleetApi,
@@ -147,15 +147,6 @@ export const getSystemWaypoints = async (systemSymbol: string) => {
   const systems = new SystemsApi(config);
   const { data } = await systems.getSystemWaypoints(systemSymbol);
   return data;
-};
-
-export const getSystemAndWaypoints = async (systemSymbol: string) => {
-  const systems = new SystemsApi(config);
-  const { data: systemData } = await systems.getSystem(systemSymbol);
-  const { data: waypointData } = await systems.getSystemWaypoints(
-    systemSymbol
-  );
-  return { systemData, waypointData };
 };
 
 export const getShipyard = async ({
