@@ -20,6 +20,6 @@ export async function run() {
     console.log(err)
   }
 }
-run()
+// run()
 
 
