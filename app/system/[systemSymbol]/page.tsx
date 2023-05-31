@@ -6,6 +6,9 @@ import { SystemCard } from '@/components/SystemCard';
 import { SystemWaypointsLineup } from '@/components/SystemWaypointsLineup';
 
 import systemsData from '../../../data/systems.json'
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { getSystemWaypoints } from '@/api';
+import { WaypointFeaturesSummary } from '@/components/WaypointFeaturesSummary';
 
 type SystemParams = {
   systemSymbol: string;
@@ -24,24 +27,38 @@ function getSystemData(systemSymbol: string) {
 export default function SystemPage({params}: {params: SystemParams} ) {
   const { systemSymbol } = params
 
+  const queryClient = useQueryClient()
   const systemData = getSystemData(systemSymbol)
-  console.log("SystemPage rendering...")
+    const { data: waypoints, isLoading, error } = useQuery({
+        queryKey: ['systemWaypoints', systemSymbol],
+        queryFn: () => getSystemWaypoints(systemSymbol)
+    })
 
+  if (!isLoading && !error && waypoints) {
+    waypoints.forEach((waypoint) => {
+      queryClient.setQueryData(['waypoint', waypoint.symbol], waypoint)
+    })
+  }
+  console.log({systemData})
   if (!systemData) {
     return (<p>No system data found</p>)
+  }
+  if (!waypoints) {
+    return (<p>No waypoint data found</p>)
   }
   return (
     <>
       <AppShell />
       {/* <main className="flex min-h-screen flex-col items-center justify-between "> */}
       <main>
-        <div className="flex flex-col items-center justify-between min-h-screen mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <div className="flex flex-row items-center justify-between  mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
           
-          <SystemWaypointsLineup systemSymbol={systemSymbol}/>
-          {/* <Asteroids waypoints={waypointData} /> */}
           <SystemCard system={systemData}/>
+          <SystemWaypointsLineup waypoints={waypoints}/>
+          {/* <Asteroids waypoints={waypointData} /> */}
           {/* <Waypoints waypointsData={waypointData}/> */}
         </div>
+          <WaypointFeaturesSummary waypoints={waypoints}/>
       </main>
     </>
   )

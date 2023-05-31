@@ -1,25 +1,13 @@
 'use client'
 import React, { useMemo } from 'react';
-import { getSystemWaypoints } from "@/api";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getEmojiForWaypointType, normalizePosition } from './utils';
 import Link from 'next/link';
+import { Waypoint } from '@spacejunk/airlock';
 
 export type SystemWaypointsLineupProps = {
-  systemSymbol: string
+  waypoints: Waypoint[]
 }
-export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({systemSymbol}) => {
-  const queryClient = useQueryClient()
-    const { data: waypoints, isLoading, error } = useQuery({
-        queryKey: ['systemWaypoints', systemSymbol],
-        queryFn: () => getSystemWaypoints(systemSymbol)
-    })
-
-  if (!isLoading && !error && waypoints) {
-    waypoints.forEach((waypoint) => {
-      queryClient.setQueryData(['waypoint', waypoint.symbol], waypoint)
-    })
-  }
+export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({waypoints}) => {
   const normalizedWaypoints = useMemo(() => normalizePosition(waypoints ?? []), [waypoints])
 
   if (!waypoints) {
@@ -27,13 +15,11 @@ export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({sys
   }
 
   return (
-    <div className="w-full flex items-center justify-center">
-      {normalizedWaypoints.map((waypoint, index) => (
+    <div className="w-full flex items-center justify-center space-x-8">
+      {normalizedWaypoints.map((waypoint) => (
         <div
           key={waypoint.symbol}
-          className={`border-2 border-blue-500 p-2 m-1 rounded-lg text-center ${
-            index === normalizedWaypoints.length - 1 ? '' : 'mr-16'
-          }`}
+          className={`border-2 border-blue-500 p-2 m-1 rounded-lg text-center`}
         >
           <div className="text-xs text-gray-600">{waypoint.symbol.split('-').pop()}</div>
           <Link href={`/waypoint/${waypoint.symbol}`}>

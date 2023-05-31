@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from 'react';
 
 const Copy = ({ emoji, toCopy }: {emoji: string, toCopy: string}) => {
