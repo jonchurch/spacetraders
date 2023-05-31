@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "fetch-systems": "curl -o ./data/systems.json https://api.spacetraders.io/v2/systems.json"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.14",
