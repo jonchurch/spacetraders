@@ -76,7 +76,7 @@ export const getEmojiForWaypointType = (type: WaypointType): string => {
     case 'JUMP_GATE':
       return '🌌';
     case 'ASTEROID_FIELD':
-      return '☄️';
+      return '🪨';
     case 'NEBULA':
       return '🌫️';
     case 'DEBRIS_FIELD':
