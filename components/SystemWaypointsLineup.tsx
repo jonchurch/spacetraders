@@ -27,7 +27,7 @@ export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({sys
             index === normalizedWaypoints.length - 1 ? '' : 'mr-16'
           }`}
         >
-          <div className="text-xs text-gray-600">{waypoint.symbol}</div>
+          <div className="text-xs text-gray-600">{waypoint.symbol.split('-').pop()}</div>
           <span
             className="text-4xl"
             title={waypoint.type}
@@ -35,7 +35,7 @@ export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({sys
             {getEmojiForWaypointType(waypoint.type)}
           </span>
           <div className="text-xs text-gray-600">
-            x: {waypoint.x}, y: {waypoint.y}
+            {waypoint.x},{waypoint.y}
           </div>
         </div>
       ))}
