@@ -1,5 +1,7 @@
 import React from 'react'
 import { Waypoint } from "@spacejunk/airlock";
+import Link from 'next/link';
+import { getEmojiForWaypointType } from './utils';
 
 export type WaypointFeaturesProps = {
   waypoints: Waypoint[]
@@ -7,12 +9,12 @@ export type WaypointFeaturesProps = {
 
 export const SystemFeatures: React.FC<WaypointFeaturesProps> = ({ waypoints }) => {
   const filteredWaypoints = (type: string) =>
-    waypoints.filter((waypoint) => waypoint.type === type);
+    waypoints.filter((waypoint) => waypoint.traits.some(({symbol}) => symbol === type));
 
   const renderTable = (type: string) => (
     <table className="table-auto border-collapse border border-gray-300 mb-4 w-full">
       <thead>
-        <tr className="bg-gray-200">
+        <tr> 
           <th className="border border-gray-300 px-2 py-1" colSpan={3}>
             {type}
           </th>
@@ -26,7 +28,9 @@ export const SystemFeatures: React.FC<WaypointFeaturesProps> = ({ waypoints }) =
       <tbody>
         {filteredWaypoints(type).map((waypoint) => (
           <tr key={waypoint.symbol}>
-            <td className="border border-gray-300 px-2 py-1">{waypoint.symbol}</td>
+            <td className="border border-gray-300 px-2 py-1">
+              <Link href={`/waypoint/${waypoint.symbol}`}>{waypoint.symbol} {getEmojiForWaypointType(waypoint.type)}</Link>
+            </td>
             <td className="border border-gray-300 px-2 py-1">{waypoint.x}</td>
             <td className="border border-gray-300 px-2 py-1">{waypoint.y}</td>
           </tr>
@@ -39,8 +43,6 @@ export const SystemFeatures: React.FC<WaypointFeaturesProps> = ({ waypoints }) =
     <div>
       {renderTable('SHIPYARD')}
       {renderTable('MARKETPLACE')}
-      {renderTable('JUMP_GATE')}
-      {renderTable('ASTEROID_FIELD')}
     </div>
   );
 };
