@@ -11,7 +11,7 @@
 // 🟨🟨🟨⬜️⬜️
 // 🟥🟥⬜️⬜️⬜️
 
-import { Ship, Waypoint } from "@spacejunk/airlock"
+import { Ship, Waypoint, WaypointType } from "@spacejunk/airlock"
 
 // but I'd like to give more fidelity in the measurement, since fuel is important!
 export const displayFuel = (current: number, capacity: number)=> {
@@ -61,4 +61,29 @@ export const normalizePosition = <T extends Location>(locations: T[]): T[] => {
     x: loc.x - minX,
     y: loc.y - minY,
   }));
+};
+
+export const getEmojiForWaypointType = (type: WaypointType): string => {
+  switch (type) {
+    case 'PLANET':
+      return '🌍';
+    case 'GAS_GIANT':
+      return '🪐';
+    case 'MOON':
+      return '🌙';
+    case 'ORBITAL_STATION':
+      return '🛰️';
+    case 'JUMP_GATE':
+      return '🌌';
+    case 'ASTEROID_FIELD':
+      return '☄️';
+    case 'NEBULA':
+      return '🌫️';
+    case 'DEBRIS_FIELD':
+      return '🔥';
+    case 'GRAVITY_WELL':
+      return '⚫️';
+    default:
+      return '';
+  }
 };
