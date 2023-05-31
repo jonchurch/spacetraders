@@ -1,17 +1,19 @@
 'use client'
-import { Asteroids, SystemInfo } from '@/components/SystemInfo'
-import Contracts from '@/components/Contracts'
+import { SystemInfo } from '@/components/SystemInfo'
 import { useQuery } from '@tanstack/react-query'
-import { getSystemAndWaypoints } from '@/api'
+import {  getSystemWaypoints } from '@/api'
 import AppShell from '@/components/AppShell'
 
-export default function Home() {
-  const systemSymbol = 'X1-DC54'
-    const { data } = useQuery({
-        queryKey: ['systemAndWaypoints', systemSymbol],
-        queryFn: () => getSystemAndWaypoints(systemSymbol)
+type SystemParams = {
+  systemSymbol: string;
+}
+
+export default function SystemPage({params}: {params: SystemParams} ) {
+  const { systemSymbol } = params
+    const { data: waypointData } = useQuery({
+        queryKey: ['systemWaypoints', systemSymbol],
+        queryFn: () => getSystemWaypoints(systemSymbol)
     })
-    const {systemData: _, waypointData} = data ?? {}
   return (
     <>
       <AppShell />
