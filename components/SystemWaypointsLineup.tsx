@@ -4,7 +4,6 @@ import { getSystemWaypoints } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import { normalizePosition } from './utils';
 
-
 export type SystemWaypointsLineupProps = {
   systemSymbol: string
 }
@@ -13,7 +12,7 @@ export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({sys
         queryKey: ['systemWaypoints', systemSymbol],
         queryFn: () => getSystemWaypoints(systemSymbol)
     })
-  const normalizedSystems = useMemo(() => normalizePosition(waypoints ?? []), [waypoints])
+  const normalizedWaypoints = useMemo(() => normalizePosition(waypoints ?? []), [waypoints])
   console.log({waypoints})
   if (!waypoints) {
     return null
@@ -21,17 +20,17 @@ export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({sys
 
   return (
     <div className="w-full flex items-center justify-center">
-      {normalizedSystems.map((system, index) => (
+      {normalizedWaypoints.map((waypoint, index) => (
         <div
-          key={system.symbol}
+          key={waypoint.symbol}
           className={`border-2 border-blue-500 p-2 m-1 rounded-lg text-center ${
-            index === normalizedSystems.length - 1 ? '' : 'mr-16'
+            index === normalizedWaypoints.length - 1 ? '' : 'mr-16'
           }`}
         >
-          <div className="text-xs text-gray-600">{system.symbol}</div>
-          <div className="text-sm font-bold">{system.type}</div>
+          <div className="text-xs text-gray-600">{waypoint.symbol}</div>
+          <div className="text-sm font-bold">{waypoint.type}</div>
           <div className="text-xs text-gray-600">
-            x: {system.x}, y: {system.y}
+            x: {waypoint.x}, y: {waypoint.y}
           </div>
         </div>
       ))}
