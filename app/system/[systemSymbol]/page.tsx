@@ -8,7 +8,7 @@ import { SystemWaypointsLineup } from '@/components/SystemWaypointsLineup';
 import systemsData from '../../../data/systems.json'
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getSystemWaypoints } from '@/api';
-import { WaypointFeaturesSummary } from '@/components/WaypointFeaturesSummary';
+import { SystemFeatures } from '@/components/SystemFeatures';
 
 type SystemParams = {
   systemSymbol: string;
@@ -58,7 +58,7 @@ export default function SystemPage({params}: {params: SystemParams} ) {
           {/* <Asteroids waypoints={waypointData} /> */}
           {/* <Waypoints waypointsData={waypointData}/> */}
         </div>
-          <WaypointFeaturesSummary waypoints={waypoints}/>
+          <SystemFeatures waypoints={waypoints}/>
       </main>
     </>
   )

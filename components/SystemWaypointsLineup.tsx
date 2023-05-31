@@ -9,7 +9,7 @@ export type SystemWaypointsLineupProps = {
 }
 export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({waypoints}) => {
   const normalizedWaypoints = useMemo(() => normalizePosition(waypoints ?? []), [waypoints])
-
+  console.log({waypoints})
   if (!waypoints) {
     return null
   }
