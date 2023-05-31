@@ -11,19 +11,22 @@ type SystemParams = {
   systemSymbol: string;
 }
 
-export async function getStaticParams() {
-  return systemsData.map((system) => ({systemSumbol: system.symbol}))
-}
+// grr idk man, I was getting into an infinite loop when going back
+// I guess it's just not worth trying to optimize this stuff rn
+// export async function getStaticParams() {
+//   return systemsData.map((system) => ({systemSumbol: system.symbol}))
+// }
 
-async function getSystemData(systemSymbol: string) {
+function getSystemData(systemSymbol: string) {
   return systemsData.find((system) => system.symbol === systemSymbol) as System
 }
 
-export default async function SystemPage({params}: {params: SystemParams} ) {
+export default function SystemPage({params}: {params: SystemParams} ) {
   const { systemSymbol } = params
 
-  const systemData = await getSystemData(systemSymbol)
+  const systemData = getSystemData(systemSymbol)
   console.log("SystemPage rendering...")
+
   if (!systemData) {
     return (<p>No system data found</p>)
   }
