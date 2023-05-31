@@ -148,6 +148,13 @@ export const getSystemWaypoints = async (systemSymbol: string) => {
   const { data } = await systems.getSystemWaypoints(systemSymbol);
   return data;
 };
+export const getWaypoint = async (waypointSymbol: string) => {
+  const systems = new SystemsApi(config);
+  const [sector, system] = waypointSymbol.split('-')
+  const systemSymbol = [sector, system].join('-')
+  const { data } = await systems.getWaypoint(systemSymbol, waypointSymbol);
+  return data;
+};
 
 export const getShipyard = async ({
   systemSymbol,
