@@ -1,7 +1,7 @@
 'use client'
 import React, { useMemo } from 'react';
 import { getSystemWaypoints } from "@/api";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getEmojiForWaypointType, normalizePosition } from './utils';
 import Link from 'next/link';
 
@@ -9,12 +9,19 @@ export type SystemWaypointsLineupProps = {
   systemSymbol: string
 }
 export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({systemSymbol}) => {
-    const { data: waypoints } = useQuery({
+  const queryClient = useQueryClient()
+    const { data: waypoints, isLoading, error } = useQuery({
         queryKey: ['systemWaypoints', systemSymbol],
         queryFn: () => getSystemWaypoints(systemSymbol)
     })
+
+  if (!isLoading && !error && waypoints) {
+    waypoints.forEach((waypoint) => {
+      queryClient.setQueryData(['waypoint', waypoint.symbol], waypoint)
+    })
+  }
   const normalizedWaypoints = useMemo(() => normalizePosition(waypoints ?? []), [waypoints])
-  console.log({waypoints})
+
   if (!waypoints) {
     return null
   }
