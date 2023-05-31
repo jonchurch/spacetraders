@@ -6,6 +6,7 @@ import { useQuery, } from '@tanstack/react-query';
 import { displayFuel, isFuelFull } from './utils';
 import { Countdown } from './Countdown';
 import { DockShip, Mine, NavigateShip,  OrbitShip, Refuel, SellAllCargo } from './ActionButtons';
+import Link from 'next/link';
 
 export const ShipCard = ({ship}: {ship: Ship}) => {
   const { systemSymbol, waypointSymbol } = ship.nav
@@ -29,7 +30,7 @@ export const ShipCard = ({ship}: {ship: Ship}) => {
       {/* <h3 className="text-sm">{shipSymbol}</h3> */}
       {/* <p className="text-sm">Faction: {ship.registration.factionSymbol}</p> */}
       <p className="text-sm">Role: {ship.registration.role}</p>
-      <p className='text-sm'>System: {ship.nav.systemSymbol}</p>
+      <p className='text-sm'>System: <Link href={`system/${ship.nav.systemSymbol}`}>{ship.nav.systemSymbol}</Link></p>
       <p className={`text-sm ${transiting && 'animate-pulse text-orange-300'}`}>Waypoint: {ship.nav.waypointSymbol}</p>
       {/* lets display the location type for each ship */}
       <p className={`text-sm ${transiting && 'text-orange-300'}`}>Location: {waypoint?.type}</p>
