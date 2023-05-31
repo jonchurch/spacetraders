@@ -38,8 +38,8 @@ export const Stats = () => {
     queryKey: ['agent']
   })
   const stats = [
-  { name: 'Credits', value: new Intl.NumberFormat().format(data?.credits ?? 0) },
-  { name: 'req/s', value: '3.65', unit: 'mins' },
+  { name: 'Credits', value: new Intl.NumberFormat().format(data?.credits ?? 0), unit: '¥'},
+  // { name: 'req/s', value: '3.65', unit: 'mins' },
 
   ]
   return (

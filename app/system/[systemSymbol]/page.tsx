@@ -23,7 +23,7 @@ export default async function SystemPage({params}: {params: SystemParams} ) {
   const { systemSymbol } = params
 
   const systemData = await getSystemData(systemSymbol)
-  console.log({systemData})
+  console.log("SystemPage rendering...")
   if (!systemData) {
     return (<p>No system data found</p>)
   }

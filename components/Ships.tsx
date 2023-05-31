@@ -22,7 +22,7 @@ export const ShipCard = ({ship}: {ship: Ship}) => {
     queryFn: () => getShipCooldown(shipSymbol),
     staleTime: Infinity
   })
-  console.log(`${shipSymbol}: ${cooldown}`)
+  // console.log(`${shipSymbol}: ${cooldown}`)
   const transiting = ship.nav.status === "IN_TRANSIT"
   return (
     <div key={shipSymbol} className="border p-4 m-2">
@@ -49,7 +49,7 @@ export const ShipCard = ({ship}: {ship: Ship}) => {
 }
 
 export const ShipControls = ({ship, waypoint}: {ship: Ship; waypoint?: Waypoint}) => {
-  console.log(ship.cargo)
+  // console.log(ship.cargo)
   return (
     <div>
       {ship.nav.status === 'DOCKED' && (

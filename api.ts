@@ -94,9 +94,7 @@ export const refuelShip = async (shipSymbol: string) => {
 
 export const getShipCooldown = async (shipSymbol: string) => {
   const fleet = new FleetApi(config);
-  console.log("SANITY")
   const res = await fleet.getShipCooldown(shipSymbol);
-  console.log('=================cooldown res:', res)
   if (res) {
     return res.data;
   }
