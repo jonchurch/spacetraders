@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { getSystemWaypoints } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import { getEmojiForWaypointType, normalizePosition } from './utils';
+import Link from 'next/link';
 
 export type SystemWaypointsLineupProps = {
   systemSymbol: string
@@ -28,12 +29,14 @@ export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({sys
           }`}
         >
           <div className="text-xs text-gray-600">{waypoint.symbol.split('-').pop()}</div>
-          <span
-            className="text-4xl"
-            title={waypoint.type}
-          >
-            {getEmojiForWaypointType(waypoint.type)}
-          </span>
+          <Link href={`/waypoint/${waypoint.symbol}`}>
+            <span
+              className="text-4xl"
+              title={waypoint.type}
+            >
+              {getEmojiForWaypointType(waypoint.type)}
+            </span>
+          </Link>
           <div className="text-xs text-gray-600">
             {waypoint.x},{waypoint.y}
           </div>
