@@ -1,12 +1,30 @@
 'use client'
 import AppShell from '@/components/AppShell'
+import { SystemCard } from '@/components/SystemCard';
+
+import systemsData from '../../../data/systems.json'
+import { System } from '@spacejunk/airlock';
 
 type SystemParams = {
   systemSymbol: string;
 }
 
-export default function SystemPage({params}: {params: SystemParams} ) {
+export async function getStaticParams() {
+  return systemsData.map((system) => ({systemSumbol: system.symbol}))
+}
+
+async function getSystemData(systemSymbol: string) {
+  return systemsData.find((system) => system.symbol === systemSymbol) as System
+}
+
+export default async function SystemPage({params}: {params: SystemParams} ) {
   const { systemSymbol } = params
+
+  const systemData = await getSystemData(systemSymbol)
+  console.log({systemData})
+  if (!systemData) {
+    return (<p>No system data found</p>)
+  }
   return (
     <>
       <AppShell />
