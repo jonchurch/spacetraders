@@ -11,7 +11,7 @@
 // 🟨🟨🟨⬜️⬜️
 // 🟥🟥⬜️⬜️⬜️
 
-import { Ship, System, Waypoint } from "@spacejunk/airlock"
+import { Ship, Waypoint } from "@spacejunk/airlock"
 
 // but I'd like to give more fidelity in the measurement, since fuel is important!
 export const displayFuel = (current: number, capacity: number)=> {
@@ -47,13 +47,18 @@ export const hasMarketplace = (waypoint?: Waypoint): boolean =>
 
 export const isFuelFull = ({fuel: {capacity, current}}: Ship) => current >= capacity
 
-export const normalizePosition = (systems: System[]): System[] => {
-  const minX = Math.min(...systems.map(({ x }) => x));
-  const minY = Math.min(...systems.map(({ y }) => y));
+export type Location<T extends object = {}> = {
+  x: number;
+  y: number;
+} & T;
 
-  return systems.map(system => ({
-    ...system,
-    x: system.x - minX,
-    y: system.y - minY,
+export const normalizePosition = <T extends Location>(locations: T[]): T[] => {
+  const minX = Math.min(...locations.map(({ x }) => x));
+  const minY = Math.min(...locations.map(({ y }) => y));
+
+  return locations.map(loc=> ({
+    ...loc,
+    x: loc.x - minX,
+    y: loc.y - minY,
   }));
 };
