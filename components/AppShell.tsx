@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { classNames } from './utils'
 import { useQuery } from '@tanstack/react-query';
 import { getAgent } from '@/api';
+import Link from 'next/link';
 
 const user = {
   name: 'Tom Cook',
@@ -72,7 +73,7 @@ export default function AppShell() {
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <span className="text-lg">{'🚀 💫'}</span>
+                      <Link href='/'><span className="text-lg">{'🚀 💫'}</span></Link>
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
