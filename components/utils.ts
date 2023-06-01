@@ -74,7 +74,7 @@ export const getEmojiForWaypointType = (type: WaypointType): string => {
     case 'ORBITAL_STATION':
       return '🛰️';
     case 'JUMP_GATE':
-      return '🌌';
+      return '⛩️';
     case 'ASTEROID_FIELD':
       return '🪨';
     case 'NEBULA':
