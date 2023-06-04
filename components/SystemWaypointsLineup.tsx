@@ -9,7 +9,6 @@ export type SystemWaypointsLineupProps = {
 }
 export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({waypoints}) => {
   // const normalizedWaypoints = useMemo(() => normalizePosition(waypoints ?? []), [waypoints])
-  console.log({waypoints})
   if (!waypoints) {
     return null
   }
@@ -19,7 +18,7 @@ export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({way
       {waypoints.map((waypoint) => (
         <div
           key={waypoint.symbol}
-          className={`border-2 border-blue-500 p-2 m-1 rounded-lg text-center`}
+          className={`border-2 ${waypoint.chart ? 'border-blue-500' : 'border-purple-500'} p-2 m-1 rounded-lg text-center`}
         >
           <div className="text-xs text-gray-600">{waypoint.symbol.split('-').pop()}</div>
           <Link href={`/waypoint/${waypoint.symbol}`}>

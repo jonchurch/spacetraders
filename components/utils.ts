@@ -89,3 +89,8 @@ export const getEmojiForWaypointType = (type: WaypointType): string => {
 };
 
 export const getSystemSymbol = (waypointSymbol: string) => waypointSymbol.split('-').slice(0,2).join('-')
+
+export const getRandomElement = (arr: unknown[]) => {
+  const randomIndex = Math.floor(Math.random() * arr.length);
+  return arr[randomIndex];
+}
