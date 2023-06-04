@@ -1,5 +1,5 @@
 'use client'
-import { Ship, Waypoint, WaypointTrait, WaypointType } from '@spacejunk/airlock'
+import { Ship, Waypoint, WaypointTrait, WaypointTraitFromJSONTyped, WaypointType } from '@spacejunk/airlock'
 
 import { getShipCooldown, getShips, getSystemWaypoints } from '../api'
 import { useQuery, } from '@tanstack/react-query';
@@ -62,7 +62,7 @@ export const ShipControls = ({ship, waypoint}: {ship: Ship; waypoint?: Waypoint}
         <NavigateShip shipSymbol={ship.symbol}/>
       }
       {ship.nav.status === "DOCKED" && !isFuelFull(ship) && 
-        waypoint && waypoint.type === WaypointType.AsteroidField &&
+        waypoint && waypoint.traits.some((trait) => trait.symbol === 'MARKETPLACE') &&
         <Refuel shipSymbol={ship.symbol}/>
       }
       {ship.nav.status === "DOCKED" && ship.cargo.units > 0 && 
@@ -76,7 +76,14 @@ export const ShipControls = ({ship, waypoint}: {ship: Ship; waypoint?: Waypoint}
 }
 
 export const Ships = () => {
-  const {data: ships} = useQuery({queryKey: ['ships'], queryFn: getShips})
+  const {data: ships} = useQuery({
+    queryKey: ['ships'],
+    queryFn: getShips,
+    // idk if this is even really working
+    // but for now I dont' really need it
+    // refetchInterval: 10000,
+    // refetchIntervalInBackground: false
+  })
 
   return (
     <div className="flex flex-col items-center">
