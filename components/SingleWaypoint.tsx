@@ -2,14 +2,16 @@ import { Waypoint } from '@spacejunk/airlock'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import React from 'react'
+import { JumpGateInfo } from './JumpGateInfo'
+
 interface SingleWaypointProps {
   waypoint: Waypoint
 }
 
 export const SingleWaypoint: React.FC<SingleWaypointProps> = ({waypoint}) => {
-  console.log("UHHH?")
   return (
-        <div className="mb-2 w-1/4">
+    <div>
+        {/* <div className="mb-2 w-1/4"> */}
           <p className="text-sm">Symbol: {waypoint.symbol}</p>
           <p className="text-sm">Type: {waypoint.type}</p>
           <p className="text-sm">System Symbol: {waypoint.systemSymbol}</p>
@@ -34,12 +36,17 @@ export const SingleWaypoint: React.FC<SingleWaypointProps> = ({waypoint}) => {
           ))}
           <p className="text-sm">Chart:</p>
           <div className="ml-2">
-                        {waypoint.chart && (<>
-            <p className="text-sm">Waypoint Symbol: {waypoint.chart.waypointSymbol}</p>
-            <p className="text-sm">Submitted By: {waypoint.chart.submittedBy}</p>
-            <p className="text-sm">Submitted On: {format(new Date(waypoint.chart.submittedOn ?? 0), 'dd/MM/yyyy hh:mm')}</p>
-                    </>)}
+        {waypoint.chart && (<>
+          <p className="text-sm">Waypoint Symbol: {waypoint.chart.waypointSymbol}</p>
+          <p className="text-sm">Submitted By: {waypoint.chart.submittedBy}</p>
+          <p className="text-sm">Submitted On: {format(new Date(waypoint.chart.submittedOn ?? 0), 'dd/MM/yyyy hh:mm')}</p>
+        </>)}
           </div>
+        {/* </div> */}
+  
+      <div className="flex flex-row items-center justify-between mt-4">
+        {waypoint.type === 'JUMP_GATE' && <JumpGateInfo waypointSymbol={waypoint.symbol}/>}
+      </div>
         </div>
   )
 }

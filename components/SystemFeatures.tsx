@@ -7,12 +7,14 @@ export type WaypointFeaturesProps = {
   waypoints: Waypoint[]
 };
 
+// const getShipYardLink = (waypointSymbol: string) => `/system/${waypointSymbol.split('-').slice(0,2).join()}/waypoints/${waypointSymbol}/shipyard`
+
 export const SystemFeatures: React.FC<WaypointFeaturesProps> = ({ waypoints }) => {
   const filteredWaypoints = (type: string) =>
     waypoints.filter((waypoint) => waypoint.traits.some(({symbol}) => symbol === type));
 
   const renderTable = (type: string) => (
-    <table className="table-auto border-collapse border border-gray-300 mb-4 w-full">
+    <table className="max-w-7xl table-auto border-collapse border border-gray-300 mb-4 w-full">
       <thead>
         <tr> 
           <th className="border border-gray-300 px-2 py-1" colSpan={3}>

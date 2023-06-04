@@ -87,3 +87,5 @@ export const getEmojiForWaypointType = (type: WaypointType): string => {
       return '';
   }
 };
+
+export const getSystemSymbol = (waypointSymbol: string) => waypointSymbol.split('-').slice(0,2).join('-')

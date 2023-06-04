@@ -51,14 +51,17 @@ export default function SystemPage({params}: {params: SystemParams} ) {
       <AppShell />
       {/* <main className="flex min-h-screen flex-col items-center justify-between "> */}
       <main>
-        <div className="flex flex-row items-center justify-between  mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-          
-          <SystemCard system={systemData}/>
-          <SystemWaypointsLineup waypoints={waypoints}/>
-          {/* <Asteroids waypoints={waypointData} /> */}
-          {/* <Waypoints waypointsData={waypointData}/> */}
-        </div>
-          <SystemFeatures waypoints={waypoints}/>
+<div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+  <div className="flex flex-row items-center justify-between">
+    <SystemCard system={systemData} />
+    <SystemWaypointsLineup waypoints={waypoints} />
+    {/* <Asteroids waypoints={waypointData} /> */}
+    {/* <Waypoints waypointsData={waypointData}/> */}
+  </div>
+  <div className="flex flex-row items-center justify-between mt-4">
+    <SystemFeatures waypoints={waypoints} />
+  </div>
+</div>
       </main>
     </>
   )

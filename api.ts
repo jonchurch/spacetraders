@@ -9,6 +9,7 @@ import {
   Survey,
   SystemsApi,
 } from "@spacejunk/airlock";
+import { getSystemSymbol } from "./components/utils";
 
 export const config = new Configuration({
   accessToken: process.env.TOKEN,
@@ -177,3 +178,11 @@ export const acceptContract = async (contractId: string) => {
     console.log(err);
   }
 };
+
+export const getJumpGate = async (waypointSymbol: string) => {
+  const systemSymbol = getSystemSymbol(waypointSymbol)
+
+  const systems = new SystemsApi(config);
+  const { data } = await systems.getJumpGate(systemSymbol, waypointSymbol)
+  return data
+}
