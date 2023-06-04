@@ -115,7 +115,9 @@ export const NavigateShip = ({shipSymbol, initialWaypointSymbol} : {shipSymbol: 
   const [waypointSymbol, setWaypointSymbol] = useState(initialWaypointSymbol);
   const queryClient = useQueryClient()
   
-  const mutation = useMutation({mutationFn: navigateShip, onSuccess: () => {
+  const mutation = useMutation({
+    mutationFn: navigateShip,
+    onSuccess: () => {
     queryClient.invalidateQueries({queryKey: ['ships']})
   }});
 
@@ -124,7 +126,7 @@ export const NavigateShip = ({shipSymbol, initialWaypointSymbol} : {shipSymbol: 
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setWaypointSymbol(event.target.value);
+    setWaypointSymbol(event.target.value.trim());
   }
 
   const handleGoClick = () => {
