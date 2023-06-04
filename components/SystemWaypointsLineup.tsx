@@ -8,7 +8,7 @@ export type SystemWaypointsLineupProps = {
   waypoints: Waypoint[]
 }
 export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({waypoints}) => {
-  const normalizedWaypoints = useMemo(() => normalizePosition(waypoints ?? []), [waypoints])
+  // const normalizedWaypoints = useMemo(() => normalizePosition(waypoints ?? []), [waypoints])
   console.log({waypoints})
   if (!waypoints) {
     return null
@@ -16,7 +16,7 @@ export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({way
 
   return (
     <div className="w-full flex items-center justify-center space-x-8">
-      {normalizedWaypoints.map((waypoint) => (
+      {waypoints.map((waypoint) => (
         <div
           key={waypoint.symbol}
           className={`border-2 border-blue-500 p-2 m-1 rounded-lg text-center`}
