@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { PurchaseShipRequest, Ship, Survey } from '@spacejunk/airlock'
 
-import { orbitShip, dockShip, navigateShip, extractResources, refuelShip, sellAllCargo, badRequest, purchaseShip, chartCurrentWaypoint, } from '../../api'
+import { orbitShip, dockShip, navigateShip, extractResources, refuelShip, sellAllCargo, badRequest, purchaseShip, chartCurrentWaypoint, jumpShip, } from '../../api'
 import { run } from "@/test"
 
 export const MakeError = () => {
@@ -123,6 +123,62 @@ export const Mine = ({shipSymbol, survey}: {shipSymbol: string; survey?: Survey}
       onClick={() => mutation.mutate({shipSymbol, survey})}
       className='bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded'
     >Mine</button>
+  )
+}
+export const JumpShip = ({shipSymbol} : {shipSymbol: string; }) => {
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [systemSymbol, setWaypointSymbol] = useState('');
+  const queryClient = useQueryClient()
+  
+  const mutation = useMutation({
+    mutationFn: jumpShip,
+    onSuccess: () => {
+    queryClient.invalidateQueries({queryKey: ['ships']})
+  }});
+
+  const handleButtonClick = () => {
+    setIsNavigating(true);
+  }
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setWaypointSymbol(event.target.value.trim());
+  }
+
+  const handleGoClick = () => {
+    if (!systemSymbol) {
+      return
+    }
+    mutation.mutate({shipSymbol, systemSymbol});
+    setIsNavigating(false);
+    setWaypointSymbol('')
+  }
+
+  return (
+    <>
+      {!isNavigating ? (
+        <button 
+          className='bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-2 rounded'
+          onClick={handleButtonClick}
+        >
+          Jump
+        </button>
+      ) : (
+        <div>
+          <input 
+            type="text" 
+            value={systemSymbol} 
+            onChange={handleInputChange}
+            className='border-2 border-purple-500 py-1 px-2 rounded bg-purple-400'
+          />
+          <button 
+            className='bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-2 rounded ml-2'
+            onClick={handleGoClick}
+          >
+            GO
+          </button>
+        </div>
+      )}
+    </>
   )
 }
 

@@ -5,7 +5,7 @@ import { getShipCooldown, getShips, getSystemWaypoints } from '../api'
 import { useQuery, } from '@tanstack/react-query';
 import { displayFuel, isFuelFull } from './utils';
 import { Countdown } from './Countdown';
-import { ChartWaypoint, DockShip, Mine, NavigateShip,  OrbitShip, Refuel, SellAllCargo } from './ActionButtons';
+import { ChartWaypoint, DockShip, JumpShip, Mine, NavigateShip,  OrbitShip, Refuel, SellAllCargo } from './ActionButtons';
 import Link from 'next/link';
 
 export const ShipCard = ({ship}: {ship: Ship}) => {
@@ -59,7 +59,10 @@ export const ShipControls = ({ship, waypoint}: {ship: Ship; waypoint?: Waypoint}
         <DockShip shipSymbol={ship.symbol}/> 
       )}
       {ship.nav.status !== 'IN_TRANSIT' &&
-        <NavigateShip shipSymbol={ship.symbol}/>
+        <>
+          <NavigateShip shipSymbol={ship.symbol}/>
+          <JumpShip shipSymbol={ship.symbol}/>
+        </>
       }
       {ship.nav.status === "DOCKED" && !isFuelFull(ship) && 
         waypoint && waypoint.traits.some((trait) => trait.symbol === 'MARKETPLACE') &&

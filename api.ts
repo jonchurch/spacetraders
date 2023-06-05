@@ -85,6 +85,11 @@ export const navigateShip = async ({
   return data;
 };
 
+export const jumpShip = async ({shipSymbol, systemSymbol}: {shipSymbol: string, systemSymbol: string}) => {
+  const fleet = new FleetApi(config)
+  return fleet.jumpShip(shipSymbol, {systemSymbol})
+}
+
 export const extractResources = async ({
   shipSymbol,
   survey,
