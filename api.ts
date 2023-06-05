@@ -29,6 +29,12 @@ export const getAgent = async () => {
   return data
 }
 
+export const chartCurrentWaypoint = async (shipSymbol: string) => {
+  const fleet = new FleetApi(config)
+  const { data } = await fleet.createChart(shipSymbol)
+  return data
+}
+
 export const purchaseShip = async ({shipType, waypointSymbol}: PurchaseShipRequest) => {
   const fleet = new FleetApi(config);
   const { data } = await fleet.purchaseShip({
@@ -96,10 +102,10 @@ export const refuelShip = async (shipSymbol: string) => {
 export const getShipCooldown = async (shipSymbol: string) => {
   const fleet = new FleetApi(config);
   const res = await fleet.getShipCooldown(shipSymbol);
-  if (res) {
+  if (res.data) {
     return res.data;
   }
-  return undefined
+  return false
 };
 
 export const sellCargo = async ({
@@ -144,7 +150,7 @@ export const sellAllCargo = async ({
 
 export const getSystemWaypoints = async (systemSymbol: string) => {
   const systems = new SystemsApi(config);
-  const { data } = await systems.getSystemWaypoints(systemSymbol);
+  const { data } = await systems.getSystemWaypoints(systemSymbol, undefined, 20);
   return data;
 };
 export const getWaypoint = async (waypointSymbol: string) => {
@@ -184,5 +190,13 @@ export const getJumpGate = async (waypointSymbol: string) => {
 
   const systems = new SystemsApi(config);
   const { data } = await systems.getJumpGate(systemSymbol, waypointSymbol)
+  return data
+}
+
+export const getMarketplace = async (waypointSymbol: string) => {
+  const systemSymbol = getSystemSymbol(waypointSymbol)
+
+  const systems = new SystemsApi(config);
+  const { data } = await systems.getMarket(systemSymbol, waypointSymbol)
   return data
 }
