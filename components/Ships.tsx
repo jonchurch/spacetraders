@@ -3,10 +3,11 @@ import { Cooldown, Ship, Waypoint, WaypointTrait, WaypointTraitFromJSONTyped, Wa
 
 import { getShipCooldown, getShips, getSystemWaypoints } from '../api'
 import { useQuery, } from '@tanstack/react-query';
-import { displayFuel, isFuelFull } from './utils';
+import { displayFuel, getEmojiForShipRole, isFuelFull } from './utils';
 import { Countdown } from './Countdown';
 import { ChartWaypoint, DockShip, JumpShip, Mine, NavigateShip,  OrbitShip, Refuel, SellAllCargo } from './ActionButtons';
 import Link from 'next/link';
+import { useMemo } from 'react';
 
 export const ShipCard = ({ship}: {ship: Ship}) => {
   const { systemSymbol, waypointSymbol } = ship.nav
@@ -28,7 +29,7 @@ export const ShipCard = ({ship}: {ship: Ship}) => {
   const transiting = ship.nav.status === "IN_TRANSIT"
   return (
     <div key={shipSymbol} className="border p-4 m-2">
-      <h2 className="font-bold mb-2">{ship.registration.name}</h2>
+      <h2 className="font-bold mb-2">{ship.registration.name} {getEmojiForShipRole(ship.registration.role)}</h2>
       {/* <h3 className="text-sm">{shipSymbol}</h3> */}
       {/* <p className="text-sm">Faction: {ship.registration.factionSymbol}</p> */}
       <p className="text-sm">Role: {ship.registration.role}</p>
@@ -90,12 +91,17 @@ export const Ships = () => {
     // refetchInterval: 10000,
     // refetchIntervalInBackground: false
   })
-
+  const command = useMemo(() => ships?.filter(
+    ({registration}) => registration.role === 'COMMAND') ?? []
+  , [ships])
+  const probes = useMemo(() => ships?.filter(({registration: {role}}) => role === 'SURVEYOR') ?? [], [ships])
+  const miners = useMemo(() => ships?.filter(({registration: {role}}) => role === 'EXCAVATOR') ?? [], [ships])
+  const all = useMemo(() => [...command, ...miners, ...probes], [command, miners, probes])
   return (
     <div className="flex flex-col items-center">
       <h1>Ships</h1>
       <div className="flex flex-wrap">
-      {ships?.map((ship) => <ShipCard key={ship.symbol} ship={ship} />)}
+      {all.map((ship) => <ShipCard key={ship.symbol} ship={ship} />)}
       </div>
     </div>
   );
