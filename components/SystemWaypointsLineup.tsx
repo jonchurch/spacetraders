@@ -1,6 +1,6 @@
 'use client'
 import React, { useMemo } from 'react';
-import { getEmojiForWaypointType, normalizePosition } from './utils';
+import { getEmojiForWaypointType, isUncharted, normalizePosition } from './utils';
 import Link from 'next/link';
 import { Waypoint } from '@spacejunk/airlock';
 
@@ -12,13 +12,14 @@ export const SystemWaypointsLineup: React.FC<SystemWaypointsLineupProps> = ({way
   if (!waypoints) {
     return null
   }
+  console.log(waypoints)
 
   return (
     <div className="w-full flex items-center justify-center space-x-8">
       {waypoints.map((waypoint) => (
         <div
           key={waypoint.symbol}
-          className={`border-2 ${waypoint.chart ? 'border-blue-500' : 'border-purple-500'} p-2 m-1 rounded-lg text-center`}
+          className={`border-2 ${isUncharted(waypoint) ? 'border-purple-500' : 'border-blue-500'} p-2 m-1 rounded-lg text-center`}
         >
           <div className="text-xs text-gray-600">{waypoint.symbol.split('-').pop()}</div>
           <Link href={`/waypoint/${waypoint.symbol}`}>
