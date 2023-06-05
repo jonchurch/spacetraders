@@ -1,5 +1,5 @@
 'use client'
-import { Ship, Waypoint, WaypointTrait, WaypointTraitFromJSONTyped, WaypointType } from '@spacejunk/airlock'
+import { Cooldown, Ship, Waypoint, WaypointTrait, WaypointTraitFromJSONTyped, WaypointType } from '@spacejunk/airlock'
 
 import { getShipCooldown, getShips, getSystemWaypoints } from '../api'
 import { useQuery, } from '@tanstack/react-query';
@@ -17,11 +17,13 @@ export const ShipCard = ({ship}: {ship: Ship}) => {
     queryFn: () => getSystemWaypoints(systemSymbol),
     select: (waypoints) => waypoints.find((wp) => wp.symbol === waypointSymbol)
   })
-  const { data: cooldown } = useQuery({
-    queryKey: ['shipCooldown', shipSymbol],
-    queryFn: () => getShipCooldown(shipSymbol),
-    staleTime: Infinity
-  })
+  let cooldown: Cooldown | undefined
+  // cooldowns are nuking my rate limit, let's chill out on that rn
+  // { data: cooldown } = useQuery({
+  //   queryKey: ['shipCooldown', shipSymbol],
+  //   queryFn: () => getShipCooldown(shipSymbol),
+  //   staleTime: Infinity
+  // })
   // console.log(`${shipSymbol}: ${cooldown}`)
   const transiting = ship.nav.status === "IN_TRANSIT"
   return (
