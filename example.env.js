@@ -1,3 +1,4 @@
 module.exports = {
-  TOASTY: 'api token'
+  TOKEN: 'api token',
+  AGENT: 'agent symbol'
 }

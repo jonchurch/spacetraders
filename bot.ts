@@ -33,18 +33,18 @@ process.on('exit', () => {
   fs.writeFileSync('run.json', JSON.stringify(requestLogs, null, 2));
 })
 
-async function run() {
-  for (let i = 0; i < 120; i++) {
-    // console.log(`Running: ${i}`)
-    systems.getSystem(env.HOME_SYSTEM)
-      .then(res => {
-        // const remaining = res.headers['x-ratelimit-remaining']
-        // const reset = res.headers['x-ratelimit-reset']
-        // console.log('')
-        // console.log(`${i}:${res.status}: Remaining:${remaining} reset:${Math.abs(new Date(reset).getTime() - new Date().getTime())}`)
-    })
-      .catch((err: Error) => console.log(chalk.red(err.message)))
-  }
-}
-
-run().catch(() => console.log("The loop threw"))
+// async function run() {
+//   for (let i = 0; i < 120; i++) {
+//     // console.log(`Running: ${i}`)
+//     systems.getSystem(env.HOME_SYSTEM)
+//       .then(res => {
+//         // const remaining = res.headers['x-ratelimit-remaining']
+//         // const reset = res.headers['x-ratelimit-reset']
+//         // console.log('')
+//         // console.log(`${i}:${res.status}: Remaining:${remaining} reset:${Math.abs(new Date(reset).getTime() - new Date().getTime())}`)
+//     })
+//       .catch((err: Error) => console.log(chalk.red(err.message)))
+//   }
+// }
+//
+// run().catch(() => console.log("The loop threw"))

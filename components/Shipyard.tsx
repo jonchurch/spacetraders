@@ -5,6 +5,7 @@ import { FC, useEffect, useState } from 'react';
 import { getAgent, getShipyard } from '@/api';
 import { PurchaseShip } from './ActionButtons';
 import { useQuery } from '@tanstack/react-query';
+import { format } from 'date-fns';
 
 interface ShipyardMenuProps {
   shipyardData: Shipyard
@@ -44,20 +45,7 @@ export const ShipyardMenu: FC<ShipyardMenuProps> = ({ shipyardData }) => {
         <p key={index} className="text-sm mb-2">- {type.type}</p>
       ))}
 
-      <h3 className="text-lg font-bold mb-1">Transactions</h3>
-        {/* not really interested in transactions rn
-      <div className="container flex flex-wrap">
-      {shipyardData.transactions?.map((transaction, index) => (
-        <div key={index} className="text-sm w-1/4 mb-2">
-          <p>Waypoint: {transaction.waypointSymbol}</p>
-          <p>Ship: {transaction.shipSymbol}</p>
-          <p>Price: {transaction.price}</p>
-          <p>Agent: {transaction.agentSymbol}</p>
-          <p>Timestamp:  {format(transaction.timestamp, 'dd/MM/yyyy hh:mm')}</p>
-        </div>
-      ))}
-      </div>
-        */}
+          {/* Add more details for frame, reactor, engine, modules, mounts */}
       <h3 className="text-lg font-bold mb-1">Ships</h3>
       <div className="flex flex-wrap"> 
       {shipyardData.ships?.map((ship, index) => (
@@ -71,7 +59,18 @@ export const ShipyardMenu: FC<ShipyardMenuProps> = ({ shipyardData }) => {
           <p>Description: {ship.frame.description}</p>
             {ship.type 
               && <PurchaseShip disabled={(agentData?.credits ?? 0) < ship.purchasePrice} shipType={ship.type} waypointSymbol={shipyardData.symbol}/>}
-          {/* Add more details for frame, reactor, engine, modules, mounts */}
+        </div>
+      ))}
+      </div>
+      <h3 className="text-lg font-bold mb-1">Transactions</h3>
+      <div className="container flex flex-wrap">
+      {shipyardData.transactions?.map((transaction, index) => (
+        <div key={index} className="text-sm w-1/4 mb-2">
+          <p>Waypoint: {transaction.waypointSymbol}</p>
+          <p>Ship: {transaction.shipSymbol}</p>
+          <p>Price: {transaction.price}</p>
+          <p>Agent: {transaction.agentSymbol}</p>
+          <p>Timestamp:  {format(new Date(transaction.timestamp), 'dd/MM/yyyy hh:mm')}</p>
         </div>
       ))}
       </div>

@@ -96,3 +96,6 @@ export const getRandomElement = (arr: unknown[]) => {
 }
 
 export const isUncharted = (waypoint: Waypoint) => !waypoint.chart
+
+export const isChartedByMe = (waypoint: Waypoint) => 
+  Boolean(waypoint.chart && process.env.AGENT && waypoint.chart.submittedBy?.includes(process.env.AGENT))
