@@ -19,6 +19,9 @@ export const displayFuel = (current: number, capacity: number)=> {
     const partialEmoji = "🟨";
     const lowEmoji = "🟥";
     const emptyEmoji = "⬜️";
+  if (capacity === 0) {
+    return `☀️☀️☀️☀️☀️☀️`
+  }
 
     let percentage = (current / capacity) * 100;
     let fuelDisplay = '';
