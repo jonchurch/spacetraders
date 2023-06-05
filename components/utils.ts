@@ -11,7 +11,7 @@
 // 🟨🟨🟨⬜️⬜️
 // 🟥🟥⬜️⬜️⬜️
 
-import { Ship, Waypoint, WaypointType } from "@spacejunk/airlock"
+import { Ship, ShipRole, Waypoint, WaypointType } from "@spacejunk/airlock"
 
 // but I'd like to give more fidelity in the measurement, since fuel is important!
 export const displayFuel = (current: number, capacity: number)=> {
@@ -87,6 +87,19 @@ export const getEmojiForWaypointType = (type: WaypointType): string => {
       return '';
   }
 };
+
+export const getEmojiForShipRole = (role: ShipRole): string => {
+  switch (role) {
+    case 'COMMAND':
+      return '👑'
+    case 'SURVEYOR':
+      return '🔭'
+    case 'EXCAVATOR':
+      return '💎'
+    default:
+      return ''
+  }
+}
 
 export const getSystemSymbol = (waypointSymbol: string) => waypointSymbol.split('-').slice(0,2).join('-')
 
