@@ -3,6 +3,7 @@ import { format } from 'date-fns'
 import Link from 'next/link'
 import React from 'react'
 import { JumpGateInfo } from './JumpGateInfo'
+import { MarketplaceInfo } from './MarketplaceInfo'
 
 interface SingleWaypointProps {
   waypoint: Waypoint
@@ -46,6 +47,7 @@ export const SingleWaypoint: React.FC<SingleWaypointProps> = ({waypoint}) => {
   
       <div className="flex flex-row items-center justify-between mt-4">
         {waypoint.type === 'JUMP_GATE' && <JumpGateInfo waypointSymbol={waypoint.symbol}/>}
+        {waypoint.traits.some(({symbol}) => symbol === 'MARKETPLACE') && <MarketplaceInfo waypointSymbol={waypoint.symbol}/>}
       </div>
         </div>
   )
