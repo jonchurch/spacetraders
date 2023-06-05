@@ -2,6 +2,7 @@ import { getMarketplace } from '@/api'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Seperator } from './Separator'
+import { TradeGood } from '@spacejunk/airlock'
 
 interface MarketplaceInfoProps  {
   waypointSymbol: string
@@ -21,9 +22,39 @@ const {data: marketplaceData} = useQuery({
   if (!marketplaceData) {
     return <p>No data found</p>
   }
+  const importsExports: TradeGood[] = [...marketplaceData.imports, ...marketplaceData.exports]
+  console.log(importsExports)
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <h2 className="text-2xl font-semibold mb-6">Marketplace Data</h2>
+      {importsExports.length > 0 ?
+        <>
+          <h3 className="text-xl font-semibold mb-4">Imports / Exports</h3>
+          <table className="table-auto border-collapse border border-gray-300 w-full mb-6">
+            <thead>
+              <tr>
+                <th className="border border-gray-300 px-2 py-1">Symbol</th>
+                <th className="border border-gray-300 px-2 py-1">Name</th>
+                <th className="border border-gray-300 px-2 py-1">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {importsExports.map((item) => (
+                <tr key={item.symbol}>
+                  <td className="border border-gray-300 px-2 py-1">
+                    {isImport(item.symbol) && <span role="img" aria-label="Import">📦</span>}
+                    {isExport(item.symbol) && <span role="img" aria-label="Export">🏭</span>}
+                    {' '}
+                    {item.symbol}
+                  </td>
+                  <td className="border border-gray-300 px-2 py-1">{item.name}</td>
+                  <td className="border border-gray-300 px-2 py-1">{item.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+      </> : null}
+
 
       <h3 className="text-xl font-semibold mb-4">Trade Goods</h3>
 
