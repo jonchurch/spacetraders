@@ -45,9 +45,13 @@ export const purchaseShip = async ({shipType, waypointSymbol}: PurchaseShipReque
 }
 
 export const getShips = async () => {
+  let limit = 20
   const fleet = new FleetApi(config);
   try {
-    const { data } = await fleet.getMyShips();
+    const { data, meta } = await fleet.getMyShips(undefined, limit);
+    if (meta.total > limit * meta.page) {
+      throw new Error("TIME TO IMPLEMENT PAGING!!")
+    }
     return data;
   } catch (error) {
     console.error(error);
