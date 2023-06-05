@@ -5,7 +5,7 @@ import { getShipCooldown, getShips, getSystemWaypoints } from '../api'
 import { useQuery, } from '@tanstack/react-query';
 import { displayFuel, isFuelFull } from './utils';
 import { Countdown } from './Countdown';
-import { DockShip, Mine, NavigateShip,  OrbitShip, Refuel, SellAllCargo } from './ActionButtons';
+import { ChartWaypoint, DockShip, Mine, NavigateShip,  OrbitShip, Refuel, SellAllCargo } from './ActionButtons';
 import Link from 'next/link';
 
 export const ShipCard = ({ship}: {ship: Ship}) => {
@@ -71,6 +71,7 @@ export const ShipControls = ({ship, waypoint}: {ship: Ship; waypoint?: Waypoint}
       {waypoint?.type === "ASTEROID_FIELD" && 
         <Mine shipSymbol={ship.symbol}/>
       }
+      <ChartWaypoint waypointSymbol={waypoint?.symbol ?? ''} shipSymbol={ship.symbol}/>
     </div>
   )
 }

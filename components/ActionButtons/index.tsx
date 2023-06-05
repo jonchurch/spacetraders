@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { PurchaseShipRequest, Ship, Survey } from '@spacejunk/airlock'
 
-import { orbitShip, dockShip, navigateShip, extractResources, refuelShip, sellAllCargo, badRequest, purchaseShip, } from '../../api'
+import { orbitShip, dockShip, navigateShip, extractResources, refuelShip, sellAllCargo, badRequest, purchaseShip, chartCurrentWaypoint, } from '../../api'
 import { run } from "@/test"
 
 export const MakeError = () => {
@@ -15,6 +15,22 @@ export const MakeError = () => {
       className='bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded'
       onClick={handleClick}
     >Bad!</button>
+  )
+}
+
+export const ChartWaypoint = ({waypointSymbol, shipSymbol}: {waypointSymbol: string, shipSymbol: string}) => {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: chartCurrentWaypoint,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['waypoint', waypointSymbol]})
+    }
+  })
+  return (
+  <button
+      onClick={() => mutation.mutate(shipSymbol)}
+      className='bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-2 rounded'
+  >Chart</button>
   )
 }
 
