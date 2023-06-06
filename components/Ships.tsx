@@ -99,7 +99,8 @@ export const Ships = () => {
   , [ships])
   const probes = useMemo(() => ships?.filter(({registration: {role}}) => role === 'SURVEYOR') ?? [], [ships])
   const miners = useMemo(() => ships?.filter(({registration: {role}}) => role === 'EXCAVATOR') ?? [], [ships])
-  const all = useMemo(() => [...command, ...miners, ...probes], [command, miners, probes])
+  const explorers = useMemo(() => ships?.filter(({registration: {role}}) => role === 'EXPLORER') ?? [], [ships])
+  const all = useMemo(() => [...command, ...explorers, ...miners, ...probes], [command, explorers, miners, probes])
   return (
     <div className="flex flex-col items-center">
       <h1>Ships</h1>
