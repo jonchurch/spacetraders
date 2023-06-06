@@ -5,6 +5,7 @@ import {
   FleetApi,
   GetShipyardRequest,
   PurchaseShipRequest,
+  Ship,
   ShipCargoItem,
   Survey,
   SystemsApi,
@@ -44,18 +45,36 @@ export const purchaseShip = async ({shipType, waypointSymbol}: PurchaseShipReque
   return data
 }
 
-export const getShips = async () => {
-  let limit = 20
+// export const getShips = async () => {
+//   let limit = 20
+//   const fleet = new FleetApi(config);
+//   try {
+//     const { data, meta } = await fleet.getMyShips(undefined, limit);
+//     if (meta.total > limit * meta.page) {
+//       throw new Error("TIME TO IMPLEMENT PAGING!!")
+//     }
+//     return data;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+export const getAllShips = async () => {
   const fleet = new FleetApi(config);
-  try {
-    const { data, meta } = await fleet.getMyShips(undefined, limit);
-    if (meta.total > limit * meta.page) {
-      throw new Error("TIME TO IMPLEMENT PAGING!!")
-    }
-    return data;
-  } catch (error) {
-    console.error(error);
+  const limit = 20;
+  let page = 1;
+  let ships: Ship[] = [];
+  const {
+    data, meta,
+  } = await fleet.getMyShips(page, limit);
+  ships = [...data];
+  while (ships.length < meta.total) {
+    page++;
+    const {
+      data,
+    } = await fleet.getMyShips(page, limit);
+    ships = [...ships, ...data];
   }
+  return ships;
 };
 
 export const orbitShip = async (shipSymbol: string) => {

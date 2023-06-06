@@ -1,4 +1,4 @@
-import { getShips } from '@/api';
+import { getAllShips } from '@/api';
 import { GetMyShips200Response, ShipNav, ShipNavStatus } from '@spacejunk/airlock';
 import { useQuery } from '@tanstack/react-query';
 import Countdown from 'react-countdown';
@@ -73,7 +73,7 @@ function ShipList({ ships }: {ships: GetMyShips200Response['data']}) {
 }
 
 export function Fleet() {
-  const {data: ships} = useQuery({queryKey: ['ships'], queryFn: getShips});
+  const {data: ships} = useQuery({queryKey: ['ships'], queryFn: getAllShips});
   // const [ships, setShips] = useState([]);
 
   // useEffect(() => {

@@ -1,7 +1,7 @@
 'use client'
 import { Cooldown, Ship, Waypoint, WaypointTrait, WaypointTraitFromJSONTyped, WaypointType } from '@spacejunk/airlock'
 
-import { getShipCooldown, getShips, getSystemWaypoints } from '../api'
+import { getAllShips, getShipCooldown, getShips, getSystemWaypoints } from '../api'
 import { useQuery, } from '@tanstack/react-query';
 import { displayFuel, getEmojiForShipRole, isFuelFull } from './utils';
 import { Countdown } from './Countdown';
@@ -88,7 +88,7 @@ export const ShipControls = ({ship, waypoint}: {ship: Ship; waypoint?: Waypoint}
 export const Ships = () => {
   const {data: ships} = useQuery({
     queryKey: ['ships'],
-    queryFn: getShips,
+    queryFn: getAllShips,
     // idk if this is even really working
     // but for now I dont' really need it
     // refetchInterval: 10000,
